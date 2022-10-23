@@ -56,6 +56,7 @@ urlpatterns = [
     path('preditshapesave/<objId>', views.preditshapesave, name='preditshapesave'),
     path('preditcontentsave/<str:objId>', views.preditcontentsave, name='preditcontentsave'),
 
+    path('qr/<int:id>', views.dynamic_qr_code, name='dynamicqr'),
 ]
 
 

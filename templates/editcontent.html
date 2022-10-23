@@ -257,26 +257,26 @@
                   <!-- FORM LINK -->
                   <div class="qr-info__form qr-info__form-link">
                     <p class="input-title margin-btm-sm">Destination URL</p>
-                    <input required type-link data-type="link" data-change name="link_data" type="text"
+                    <input required type-link data-type="link" data-change name="link_data" type="text" value="{{qr_data.link_data}}"
                       class="qr-info__input margin-btm-sm" placeholder="https://" />
                     <span class="input-subtitle">Your QR code will open this URL.</span>
                   </div>
                   <!-- FORM EMAIL -->
                   <div class="qr-info__form qr-info__form-email">
                     <p class="input-title margin-btm-sm">E-mail Content</p>
-                    <input data-change data-type="email" required name="email" type="email"
+                    <input data-change data-type="email" required name="email" type="email" value="{{qr_data.email}}"
                       class="qr-info__input margin-btm-sm" placeholder="Your Email Address" />
-                    <input data-change data-type="email" required name="subject" type="text"
+                    <input data-change data-type="email" required name="subject" type="text" value="{{qr_data.subject}}"
                       class="qr-info__input margin-btm-sm" placeholder="Subject Of Email" />
                     <textarea data-change data-type="email" required name="message" id="message2"
-                      class="qr-info__input margin-btm-sm" rows="2" placeholder="Message"></textarea>
+                      class="qr-info__input margin-btm-sm" rows="2" placeholder="Message">{{qr_data.message}}</textarea>
                     <span class="input-subtitle">Scanning the QR code will send this email.</span>
                   </div>
                   <!-- FORM TEXT -->
                   <div class="qr-info__form qr-info__form-text">
                     <p class="input-title margin-btm-sm">Text</p>
                     <textarea name="text_data" data-change required data-type="text" name="message" id="message3"
-                      class="qr-info__input margin-btm-sm" rows="2" placeholder="Message"></textarea>
+                      class="qr-info__input margin-btm-sm" rows="2" placeholder="Message">{{qr_data.text_data}}</textarea>
                     <span class="input-subtitle">Scanning the QR code will show this text.</span>
                   </div>
                   <!-- FORM CALL -->
@@ -286,8 +286,7 @@
                       <div class="country-code__input">
                         <label for="country-code" class="input-subtitle margin-btm-sm">Country
                           code</label>
-                        {#
-                        <x-countrySelect name='country_code' data_type='call' />#}
+                        <x-countrySelect name='country_code' data_type='call' />
                         <select name="country_code" data-change="" required="" data-type="call" class="qr-info__input">
                           <option data-countrycode="GB" value="44">UK (+44)</option>
                           <option data-countrycode="US" value="1">USA (+1)</option>
@@ -644,7 +643,7 @@
                       <div class="phone-number__input">
                         <label for="telephone-number" class="input-subtitle margin-btm-sm">Phone
                           Number</label>
-                        <input name="phone_number" data-change required data-type="call" type="number"
+                        <input name="phone_number" data-change required data-type="call" type="number" value="{{qr_data.phone_number}}"
                           id="telephone-number" placeholder="Phone number" class="qr-info__input" />
                       </div>
                     </div>
@@ -1014,12 +1013,12 @@
                       <div class="phone-number__input">
                         <label for="telephone-number2" class="input-subtitle margin-btm-sm">Phone
                           Number</label>
-                        <input data-change required data-type="sms" name="sms_phone_number" type="number"
+                        <input data-change required data-type="sms" name="sms_phone_number" type="number" value="{{qr_data.sms_phone_number}}"
                           id="telephone-number2" placeholder="Phone number" class="qr-info__input" />
                       </div>
                       <div class="input-textarea grid-full-row">
                         <textarea data-change required data-type="sms" name="sms_message" id="message4"
-                          class="qr-info__input" rows="2" placeholder="Message"></textarea>
+                          class="qr-info__input" rows="2" placeholder="Message">{{qr_data.sms_message}}</textarea>
                       </div>
                     </div>
                     <span class="input-subtitle">Scanning the QR code will send message to the phone
@@ -1467,12 +1466,12 @@
                       <div class="phone-number__input">
                         <label for="telephone-number3" class="input-subtitle margin-btm-sm">Phone
                           Number</label>
-                        <input name="whatsapp_phone_number" data-change required data-type="whatsapp" type="tel"
+                        <input name="whatsapp_phone_number" data-change required data-type="whatsapp" type="tel" value="{{qr_data.whatsapp_phone_number}}"
                           id="telephone-number3" placeholder="Phone number" class="qr-info__input" />
                       </div>
                       <div class="input-textarea grid-full-row">
                         <textarea name="whatsapp_message" data-change required data-type="whatsapp" name="message"
-                          id="message" class="qr-info__input margin-btm-sm" rows="2" placeholder="Message"></textarea>
+                          id="message" class="qr-info__input margin-btm-sm" rows="2" placeholder="Message">{{qr_data.whatsapp_message}}</textarea>
                       </div>
                     </div>
                     <span class="intput-subtitle">Scanning the QR code will send whatsapp message to the
@@ -1486,7 +1485,7 @@
                       <div class="network-name__input grid-span-2">
                         <label for="network-name__wifi" class="input-subtitle margin-btm-sm">Network
                           Name</label>
-                        <input name="network_name" data-change required data-type="wifi" type="text"
+                        <input name="network_name" data-change required data-type="wifi" type="text" value="{{qr_data.network_name}}"
                           id="network-name__wifi" placeholder="SSID" class="qr-info__input" />
                       </div>
                       <div class="network-type__input grid-span-2">
@@ -1499,7 +1498,7 @@
                         </select>
                       </div>
                       <div class="password__input grid-span-2">
-                        <label for="password__wifi" class="input-subtitle margin-btm-sm">Password</label>
+                        <label for="password__wifi" class="input-subtitle margin-btm-sm">Password {{qr_data.network_password}}</label>
                         <input name="network_password" required data-change data-type="wifi" type="password"
                           id="password__wifi" placeholder="WI-FI password" class="qr-info__input" />
                       </div>
@@ -1573,7 +1572,7 @@
                   <div class="qr-info__form qr-info__form-video">
                     <h2 class="tertiary-heading margin-btm-sm">Video QR Code</h2>
                     <span class="input-subtitle margin-btm-sm">Share a video inside your QR Code.</span>
-                    <input type-link required data-type="video" data-change name="video" type="text"
+                    <input type-link required data-type="video" data-change name="video" type="text" value="{{qr_data.video}}"
                       class="qr-info__input margin-btm-sm" placeholder="https://www.youtube.com/{video-path}" />
                     <!-- {# {{-- <input id="video-input" required accept=".mp4,.m3u8,.mov,.avi,.wmv" type="file" -->
                       <!-- data-change#} {# hidden name="video" data-type="video"> --}}#} -->

@@ -23,6 +23,7 @@ import uuid
 from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
+from django.http.response import HttpResponseRedirectBase
 
 def index(request):
     qrs=Qrcodes.objects.all()
@@ -160,10 +161,16 @@ def dashboardCreateSave(request):
             extra = {'user_id': request.user}
             # import requests
             API_ENDPOINT = "https://qrsample.qrlab.co/api/generate/qrcode"
+            uid=str(uuid.uuid4())[:5]
+            qr = Qrcodes(**request.POST.dict(), **extra)
+            qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+            qr.save()
             
             if request.POST['type']=='link':
                 data = {
-                    "link_data": request.POST['link_data'],
+
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "link_data": request.POST['link_data'],
                     # "message":request.POST['message'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
@@ -184,7 +191,8 @@ def dashboardCreateSave(request):
 
             if request.POST['type']=='text':
                 data = {
-                    "text_data":request.POST['text_data'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "text_data":request.POST['text_data'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -199,14 +207,15 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='email':
                 data = {
-                    "email":request.POST['email'],
-                    "subject":request.POST['subject'],
-                    "message":request.POST['message'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "email":request.POST['email'],
+                    # "subject":request.POST['subject'],
+                    # "message":request.POST['message'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -221,13 +230,14 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='call':
                 data = {
-                    "country_code":request.POST['country_code'],
-                    "phone_number":request.POST['phone_number'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "country_code":request.POST['country_code'],
+                    # "phone_number":request.POST['phone_number'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -242,14 +252,15 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='sms':
                 data = {
-                    "sms_country_code":request.POST['sms_country_code'],
-                    "sms_phone_number":request.POST['sms_phone_number'],
-                    "sms_message":request.POST['sms_message'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "sms_country_code":request.POST['sms_country_code'],
+                    # "sms_phone_number":request.POST['sms_phone_number'],
+                    # "sms_message":request.POST['sms_message'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -264,7 +275,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
             if request.POST['type']=='vcard':
                 data = {
@@ -300,9 +311,10 @@ def dashboardCreateSave(request):
 
             if request.POST['type']=='whatsapp':
                 data = {
-                    "whatsapp_country_code":request.POST['whatsapp_country_code'],
-                    "whatsapp_phone_number":request.POST['whatsapp_phone_number'],
-                    "whatsapp_message":request.POST['whatsapp_message'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "whatsapp_country_code":request.POST['whatsapp_country_code'],
+                    # "whatsapp_phone_number":request.POST['whatsapp_phone_number'],
+                    # "whatsapp_message":request.POST['whatsapp_message'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -317,15 +329,17 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='wifi':
                 data = {
-                    "network_name":request.POST['network_name'],
-                    "network_type":request.POST['network_type'],
-                    "network_password":request.POST['network_password'],
-                    "wifi_hidden":request.POST['wifi_hidden'],
+                    # "network_name":request.POST['network_name'],
+                    # "network_type":request.POST['network_type'],
+                    # "network_password":request.POST['network_password'],
+                    # "wifi_hidden":request.POST['wifi_hidden'],
+
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -340,7 +354,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='pdf':
@@ -385,7 +399,8 @@ def dashboardCreateSave(request):
 
             if request.POST['type']=='video':
                 data = {
-                    "video":request.POST['video'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
+                    # "video":request.POST['video'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -400,17 +415,17 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                     
                 }
 
             
             r = requests.post(url=API_ENDPOINT, data=data)
             tex = r.json()['content']
-            uid=str(uuid.uuid4())[:5]
+            # uid=str(uuid.uuid4())[:5]
             
             # qr = Qrcodes.objects.create(**request.POST.dict(), **extra)
-            qr = Qrcodes(**request.POST.dict(), **extra)
+            # qr = Qrcodes(**request.POST.dict(), **extra)
             svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
             svgFile.write(tex)
             svgFile.close()
@@ -418,9 +433,9 @@ def dashboardCreateSave(request):
             renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
             renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
             renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
-            qr.uuid=uid
-            qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
-            qr.save()
+            # qr.uuid=uid
+            # qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+            # qr.save()
             return JsonResponse({
                 'success': 'Successfully created a Qrcode.',
             })
@@ -546,7 +561,8 @@ def qrtitleset(request,objId):
             return redirect('/dashboard/statics')
 
 def editcontent(request,objId):
-    return render(request,'editcontent.html',{'objId':objId})
+    qr_data = Qrcodes.objects.get(pk=objId)
+    return render(request,'editcontent.html',{'objId':objId, 'qr_data':qr_data})
 
 
 @csrf_exempt
@@ -555,8 +571,14 @@ def editcontentsave(request,objId):
     API_ENDPOINT = "https://qrsample.qrlab.co/api/generate/qrcode"
             
     if request.POST['type']=='link':
+                uid=str(uuid.uuid4())[:5]
+                obj.uuid=str(uid)
+                obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                obj.link_data=request.POST['link_data']
+                obj.save()
                 data = {
-                    "link_data": request.POST['link_data'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+                    # "link_data": request.POST['link_data'],
                     # "message":request.POST['message'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
@@ -574,104 +596,123 @@ def editcontentsave(request,objId):
                     "label_font": request.POST['label_font'],
                     "type": request.POST['type']
                 }
-                obj.link_data=request.POST['link_data']
 
     if request.POST['type']=='text':
-                data = {
-                    "text_data":request.POST['text_data'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.text_data=request.POST['text_data']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.text_data=request.POST['text_data']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "text_data":request.POST['text_data'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
     if request.POST['type']=='email':
-                data = {
-                    "email":request.POST['email'],
-                    "subject":request.POST['subject'],
-                    "message":request.POST['message'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.subject=request.POST['subject']
-                obj.message=request.POST['message']
-                obj.email=request.POST['email']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.subject=request.POST['subject']
+        obj.message=request.POST['message']
+        obj.email=request.POST['email']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "email":request.POST['email'],
+            # "subject":request.POST['subject'],
+            # "message":request.POST['message'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
     if request.POST['type']=='call':
-                data = {
-                    "country_code":request.POST['country_code'],
-                    "phone_number":request.POST['phone_number'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.country_code=request.POST['country_code']
-                obj.phone_number=request.POST['phone_number']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.country_code=request.POST['country_code']
+        obj.phone_number=request.POST['phone_number']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "country_code":request.POST['country_code'],
+            # "phone_number":request.POST['phone_number'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
     if request.POST['type']=='sms':
-                data = {
-                    "sms_country_code":request.POST['sms_country_code'],
-                    "sms_phone_number":request.POST['sms_phone_number'],
-                    "sms_message":request.POST['sms_message'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.sms_country_code=request.POST['sms_country_code']
-                obj.sms_phone_number=request.POST['sms_phone_number']
-                obj.sms_message=request.POST['sms_message']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.sms_country_code=request.POST['sms_country_code']
+        obj.sms_phone_number=request.POST['sms_phone_number']
+        obj.sms_message=request.POST['sms_message']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "sms_country_code":request.POST['sms_country_code'],
+            # "sms_phone_number":request.POST['sms_phone_number'],
+            # "sms_message":request.POST['sms_message'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
 
@@ -722,57 +763,66 @@ def editcontentsave(request,objId):
 
 
     if request.POST['type']=='whatsapp':
-                data = {
-                    "whatsapp_country_code":request.POST['whatsapp_country_code'],
-                    "whatsapp_phone_number":request.POST['whatsapp_phone_number'],
-                    "whatsapp_message":request.POST['whatsapp_message'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.whatsapp_country_code=request.POST['whatsapp_country_code']
-                obj.whatsapp_phone_number=request.POST['whatsapp_phone_number']
-                obj.whatsapp_message=request.POST['whatsapp_message']
-
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.whatsapp_country_code=request.POST['whatsapp_country_code']
+        obj.whatsapp_phone_number=request.POST['whatsapp_phone_number']
+        obj.whatsapp_message=request.POST['whatsapp_message']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "whatsapp_country_code":request.POST['whatsapp_country_code'],
+            # "whatsapp_phone_number":request.POST['whatsapp_phone_number'],
+            # "whatsapp_message":request.POST['whatsapp_message'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
     if request.POST['type']=='wifi':
-                data = {
-                    "network_name":request.POST['network_name'],
-                    "network_type":request.POST['network_type'],
-                    "network_password":request.POST['network_password'],
-                    "wifi_hidden":request.POST['wifi_hidden'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.wifi_hidden=request.POST['wifi_hidden']
-                obj.network_name=request.POST['network_name']
-                obj.network_type=request.POST['network_type']
-                obj.network_password=request.POST['network_password']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.wifi_hidden=request.POST['wifi_hidden']
+        obj.network_name=request.POST['network_name']
+        obj.network_type=request.POST['network_type']
+        obj.network_password=request.POST['network_password']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "network_name":request.POST['network_name'],
+            # "network_type":request.POST['network_type'],
+            # "network_password":request.POST['network_password'],
+            # "wifi_hidden":request.POST['wifi_hidden'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
     if request.POST['type']=='pdf':
@@ -820,31 +870,37 @@ def editcontentsave(request,objId):
 
 
     if request.POST['type']=='video':
-                data = {
-                    "video":request.POST['video'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.video=request.POST['video']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.video=request.POST['video']
+        obj.save()
+
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            # "video":request.POST['video'],
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
             
     r = requests.post(url=API_ENDPOINT, data=data)
     tex = r.json()['content']
-    uid=str(uuid.uuid4())[:5]
+    # uid=str(uuid.uuid4())[:5]
 
     svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
     svgFile.write(tex)
@@ -853,9 +909,9 @@ def editcontentsave(request,objId):
     renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
     renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
     renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
-    obj.uuid=str(uid)
-    obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
-    obj.save()
+    # obj.uuid=str(uid)
+    # obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+    # obj.save()
     return JsonResponse({
         'success': 'Successfully created a Qrcode.',
     })
@@ -1949,3 +2005,53 @@ def preditcontentsave(request,objId):
     r = requests.post(url=API_ENDPOINT, data=data)
     tex = r.json()['content']
     return HttpResponse(tex)
+
+class HttpResponseRedirect(HttpResponseRedirectBase):
+    status_code = 302
+    allowed_schemes = ["http", "https", "tel", "mailto", "wifi", "sms", "whatsapp"]
+
+
+def dynamic_qr_code(request, id):
+    qr_Data = Qrcodes.objects.get(id=id)
+    qr_Data.scans = qr_Data.scans + 1
+    qr_Data.save()
+    if qr_Data.type == 'link':
+        return redirect(qr_Data.link_data)
+
+    if qr_Data.type == 'email':
+        email_url = 'mailto:' + qr_Data.email + '?subject=' + qr_Data.subject + '&body=' + qr_Data.message
+        return HttpResponseRedirect(email_url)
+    if qr_Data.type == 'call':
+        tel_url = 'tel:' + qr_Data.country_code + qr_Data.phone_number
+        return HttpResponseRedirect(tel_url)
+
+    if qr_Data.type == 'text':
+        return HttpResponse(qr_Data.text_data)
+    
+    if qr_Data.type == 'wifi':
+        # wifi_url = 'WIFI:T:' + qr_Data.network_type + ';S:' + qr_Data.network_name + ';P:' + qr_Data.network_password + ';H:' + qr_Data.wifi_hidden + ';;'
+        wifi_url = 'wifi:' + qr_Data.network_name + ':' + qr_Data.network_password + ':' + qr_Data.network_type + ':' + qr_Data.wifi_hidden
+        return JsonResponse(wifi_url, safe=False)
+
+    if qr_Data.type == 'sms':
+        #sms_url for android
+        sms_url_android = 'sms:' + qr_Data.sms_country_code + qr_Data.sms_phone_number + '?body=' + qr_Data.sms_message
+
+        # sms_url for iphone
+        sms_url_iphone = 'sms:' + qr_Data.sms_country_code + qr_Data.sms_phone_number + '&body=' + qr_Data.sms_message
+
+        #identify the device and redirect to the sms_url
+        #identify if the device is android or iphone
+        if 'iPhone' in request.META['HTTP_USER_AGENT']:
+            return HttpResponseRedirect(sms_url_iphone)
+        # if 'Android' in request.META['HTTP_USER_AGENT']:
+        #     return HttpResponseRedirect(sms_url_android)
+        else:
+            return HttpResponseRedirect(sms_url_android)
+
+    if qr_Data.type == 'whatsapp':
+        whatsapp_url = 'whatsapp://send?text=' + qr_Data.whatsapp_message + '&phone=' + qr_Data.whatsapp_country_code + qr_Data.whatsapp_phone_number
+        return HttpResponseRedirect(whatsapp_url)
+
+    if qr_Data.type == 'video':
+        return HttpResponseRedirect(qr_Data.video)

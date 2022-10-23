@@ -120,3 +120,5 @@ class Qrcodes(models.Model):
     # Type Images
     images = models.TextField(null=True)
 
+    def __str__(self):
+        return self.type
