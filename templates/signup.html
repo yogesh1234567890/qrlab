@@ -1,0 +1,97 @@
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <title>Qrlabs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf" content="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% load static %}
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- App css -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/theme.min.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/app.css'%}" rel="stylesheet" type="text/css">
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1080.0" data-gr-ext-installed="">
+
+    
+<div>
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-8">
+                <div class="d-flex align-items-center min-vh-100">
+                    <div class="w-100 d-block bg-white shadow-lg rounded my-5">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="p-5">
+                                    <div class="text-center mb-5">
+                                        <a href="index.html" class="text-dark font-size-22 font-family-secondary">
+                                            <b>Qrlabs</b>
+                                        </a>
+                                    </div>
+                                    <h1 class="h5 mb-1">Sign up using your email</h1>
+                                    <p class="text-muted mb-4">Sign up for free and generate your dynamic qrcode today!
+                                    </p>
+                                    <form action="/signup" method="POST">
+                                        {% csrf_token %}
+{#                                        <input type="hidden" name="_token" value="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4">                                        #}
+                                        <div class="form-group">
+                                            <input value="" required="" type="text" name="name" class="form-control form-control-user" placeholder="Full Name">
+                                        </div>
+                                                                                <div class="form-group">
+                                            <input value="" required="" type="email" name="email" class="form-control form-control-user" placeholder="Email Address">
+                                        </div>
+                                                                                <div class="form-group">
+                                            <input required="" id="password" type="password" name="password" class="form-control form-control-user" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" id="confirm_password" type="password" name="password_confirmation" class="form-control form-control-user" placeholder="Confirm Password" onkeyup='check();'>
+                                        </div>
+
+                                        <button id="btn" class="btn btn-success btn-block waves-effect waves-light"> Sign Up
+                                        </button>
+                                    </form>
+                                    <span id='message'></span>
+                                    <div class="row mt-4">
+                                        <div class="col-12 text-center">
+                                            
+                                            <p class="text-muted mb-0"><span id='message'></span>
+                                            </p>
+                                            <p class="text-muted mb-0">Already have an account?<a href="/loginPage" class="text-muted font-weight-medium ml-1"><b>Sign In</b></a>
+                                            </p>
+                                        </div> <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                </div> <!-- end .padding-5 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div> <!-- end .w-100 -->
+                </div> <!-- end .d-flex -->
+            </div> <!-- end col-->
+        </div> <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>
+
+
+<script>
+var check = function() {
+  if (document.getElementById('password').value !=
+    document.getElementById('confirm_password').value) {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'Passwords are not matching';
+    document.getElementById('btn').disabled = true;
+
+  }
+  else {
+      document.getElementById('message').innerHTML = '';
+      document.getElementById('btn').disabled = false;
+  }
+}
+</script>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>

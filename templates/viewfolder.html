@@ -1,0 +1,341 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Qrlabs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="csrf" content="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="images/favicon.ico" />
+  {% load static %}
+
+  <!-- App css -->
+  <link href="{% static 'css/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/theme.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <!-- Begin page -->
+  <div id="layout-wrapper">
+    <header id="page-topbar">
+      <div class="navbar-header">
+        <div class="d-flex align-items-left">
+          <button type="button" class="btn btn-sm mr-2 d-lg-none px-3 font-size-16 header-item waves-effect"
+            id="vertical-menu-btn">
+            <i class="fa fa-fw fa-bars"></i>
+          </button>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <div class="dropdown d-inline-block ml-2">
+            <button type="button" class="btn header-item waves-effect text-white" id="page-header-user-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="d-none d-sm-inline-block ml-1">{{user.username}}</span>
+              <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item d-flex align-items-center justify-content-between" href="/logout">
+                <span>Log Out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="vertical-menu mm-active">
+      <div data-simplebar="init" class="h-100 mm-show">
+        <div class="simplebar-wrapper" style="margin: 0px;">
+          <div class="simplebar-height-auto-observer-wrapper">
+            <div class="simplebar-height-auto-observer"></div>
+          </div>
+          <div class="simplebar-mask">
+            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+              <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden;">
+                <div class="simplebar-content" style="padding: 0px;">
+                  <div class="navbar-brand-box mt-2 ml-3 text-left">
+                    <a href="/" class="logo">
+                      <img height="80" src="{% static 'images/qrlabs-logo-grey.png' %}" alt="" />
+                    </a>
+                  </div>
+
+                  <!--- Sidemenu -->
+                  <div id="sidebar-menu" class="mm-active">
+                    <!-- Left Menu Start -->
+                    <ul class="metismenu list-unstyled mm-show" id="side-menu">
+                      <li class="color-dark menu-title">
+                        <i class="fas fa-qrcode"></i> Qr Codes
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard" class="waves-effect"><i
+                            class="mdi mdi-qrcode-scan"></i><span>Active</span></a>
+                      </li>
+
+                      <li class="active__link mm-active">
+                        <a href="/dashboard/statics" class="waves-effect active"><i
+                            class="mdi mdi-qrcode-scan"></i><span>Statics</span></a>
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard/archived" class="waves-effect"><i
+                            class="feather-trash-2"></i><span>Archived</span></a>
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard/folders" class="waves-effect"><i
+                            class="feather-folder"></i><span>Folders</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Sidebar -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="simplebar-placeholder" style="width: auto; height: 395px;"></div>
+        </div>
+        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+          <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+        </div>
+        <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+          <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="main-content">
+      <div class="page-content">
+        <div class="container-fluid">
+          
+
+
+          <div class="row align-items-center justify-content-center mt-sm-5 mt-3 mb-3">
+            <div class="col-md-12 row">
+              <div class="col-md-12 mb-3">
+                <div class="col-md-6 mb-4">
+                  <h2 class="page-heading" style="text-transform: capitalize;">{{rfolder.name}}</h2>
+                </div>
+                
+              </div>
+              {% for obj in qrs %}
+              {% if obj.folder_id == rfolder %}
+              <div class="col-md-6 mb-5">
+                <div class="qr-code">
+                  <div class="left">
+                    <img width="200" height="200" src="{% static obj.qrCodeimage %}" alt="">
+                    <a target="_blank"
+                      href="/qr-code/view/b8cc3c4d44d685db9fc2c25699ca3c679528f407eeaa6eddb1a4300597bbe221">View Qr
+                      Code</a>
+                    <a href="{% url 'dashboarddownload' obj.id %}" download="{% url 'dashboarddownload' obj.id %}" class="btn btn-outline-info btn-block">Download</a>
+                  </div>
+                  <div class="right">
+                    <div class="top">
+
+                      <form method="post" action="/qrtitleset/{{obj.id}}">
+                        {% csrf_token %}
+                            <input  class="form-control-input qrName" style=" border-left: none;
+                            border-right: none;
+                            border-top: none;
+                            outline: none;
+                            width: auto;
+                            left: 18%;
+                            top: -2vh;
+                            position: relative;
+                            border-bottom-color: #8677dd;
+                            display: none;" placeholder="Enter QR name : " id="qrName{{obj.id}}" type="text" name="qrtitlename">
+                            <input id="qrNameSubmit{{obj.id}}" style="font-size: medium;
+                            background-color: #8677dd;
+                            border: 3px solid #8677dd;
+                            color: white;
+                            border-radius: 20px;
+                            position: relative;
+                            left: 97%;
+                            top: -7vh;
+                            display: none;" class="qrNameSubmit" type="submit" value="✓">
+                      </form>
+
+                      <button id="btn{{obj.id}}"  class="btn btn-sm ">
+                        <i  class="feather-edit"></i>
+                      </button>
+
+                      <div id="ttbox{{obj.id}}" data-qrcode-title-box="">
+                        <p name="qrnamedisplay" class="title-text"><g>{{obj.qrname}}</g></p>
+                        <button class="btn btn-sm" data-toggle="modal" data-target="#moveToFolder{{obj.id}}" value="8">
+                          <i class="feather-folder"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="type">
+                      {% if obj.type == 'link' %}
+                      <i class="feather-external-link"></i>
+                      Link
+                      {% endif %}
+                    </div>
+                    <p>{{obj.created_at}}</p>
+
+                    <div class="item">
+                      <i class="feather-bar-chart-2"></i>
+                      <p>{{obj.scans}} Scans</p>
+                    </div>
+
+                    <script>
+                      document.getElementById('btn{{obj.id}}').addEventListener('click',()=>{
+                        document.getElementById('ttbox{{obj.id}}').style.display='none';
+                        document.getElementById('qrName{{obj.id}}').style.display='block';
+                        document.getElementById('qrNameSubmit{{obj.id}}').style.display='block';
+                        document.getElementById('btn{{obj.id}}').style.display='none';
+                        
+                      })
+
+                    </script>
+
+                    <form action="/panel/static/qrcode/8" method="POST" class="form_item">
+                      {% csrf_token %}
+                      <button>
+                        {% if obj.isDynamic %}
+                        <i class="feather-activity"></i>
+
+                        <a href="{% url 'mkdynamic' obj.id %}">Make Static</a>
+                        {% else %}
+                        <i class="mdi mdi-react"></i>
+                        <a href="{% url 'mkstatic' obj.id %}">Make Dynamic</a>
+                        {% endif%}
+                      </button>
+                    </form>
+                    <a href="/my/qrcodes/edit/qrcode/8" class="item">
+                      <i class="feather-edit"></i>
+                      <p>Edit Content</p>
+                    </a>
+                    <a href="/my/qrcodes/editColorsShapes/qrcode/8" class="item">
+                      <i class="fas fa-palette"></i>
+                      <p>Edit Color &amp; Shape</p>
+                    </a>
+                    <form action="/panel/delete/qrcode/8" method="POST" class="form_item">
+                      <input type="hidden" name="_token" value="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4" />
+                      <input type="hidden" name="_method" value="delete" />
+                      <button>
+                        <i class="feather-trash-2"></i>
+                        <a href="{% url 'archiveObj' obj.id %}">Archive</a>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal fade" id="moveToFolder{{obj.id}}" tabindex="-1" role="dialog"
+              aria-labelledby="moveToFolderTitle" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <form action="/movetofolder/{{obj.id}}" method="POST" class="modal-content">
+                  {% csrf_token %}
+                  <input type="hidden" name="_token" value="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4" />
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="moveToFolderTitle">
+                      Move qrcode to folder
+                    </h5>
+                    <button type="button" class="close waves-effect waves-light" data-dismiss="modal"
+                      aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <select class="form-control" name="folder_id">
+                      {% for fol in folder %}
+                      <option value="{{fol.name}}">{{fol.name}}</option>
+                      {% endfor %}
+                    </select>
+                    <input name="qrcode_id" type="text" hidden="" />
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal">
+                      Close
+                    </button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">
+                      Save
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    
+
+
+  </div>
+
+  <!-- Overlay-->
+  <div class="menu-overlay"></div>
+
+  <!-- jQuery  -->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/metismenu.min.js' %}"></script>
+  <script src="{% static 'js/waves.js' %}"></script>
+  <script src="{% static 'js/simplebar.min.js' %}"></script>
+
+  <!-- Morris Js-->
+  <script src="{% static 'js/morris.min.js' %}"></script>
+  <!-- Raphael Js-->
+  <script src="{% static 'js/raphael.min.js' %}"></script>
+
+  <!-- Morris Custom Js-->
+  <script src="{% static 'js/dashboard-demo.js' %}"></script>
+
+  <!-- App js -->
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+
+  <script type="text/javascript">
+    $(".qr__code__style").on("click", function () {
+      $(".qr__code__style").removeClass("active_qr_styling");
+      $(this).addClass("active_qr_styling");
+    });
+    $(".qr__code__eye__style").on("click", function () {
+      $(".qr__code__eye__style").removeClass("active_qr_styling");
+      $(this).addClass("active_qr_styling");
+    });
+
+    $("[data-toggle='modal']").on("click", function () {
+      $("input[name='qrcode_id']").val($(this).val());
+    });
+  </script>
+  <script src="{% static 'js/sweetalert2.min.js' %}"></script>
+  <script type="text/javascript">
+    $(".btn-danger").on("click", function (e) {
+      e.preventDefault();
+      let form = $(this).parent();
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this qr code?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(function (result) {
+        if (result.value) {
+          form.submit();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

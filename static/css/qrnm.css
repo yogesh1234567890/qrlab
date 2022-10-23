@@ -1,0 +1,21 @@
+.qrName{
+   
+}
+
+.qrNameSubmit{
+    font-size: medium;
+    background-color: #8677dd;
+    border: 3px solid #8677dd;
+    color: white;
+    border-radius: 20px;
+    position: relative;
+    left: 97%;
+    top: -7vh;
+    display: none;
+}
+
+.qrNameSubmit:hover{
+    
+    transform: scale(.9);
+    border: solid transparent;
+}

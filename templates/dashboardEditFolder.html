@@ -1,0 +1,197 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Qrlabs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="csrf" content="PetquMnzZ1LEwzbhIOOP0XGxHUHGUhDODuCZETz4" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="images/favicon.ico" />
+  {% load static %}
+
+  <!-- App css -->
+  <link href="{% static 'css/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/theme.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <!-- Begin page -->
+  <div id="layout-wrapper">
+    <header id="page-topbar">
+      <div class="navbar-header">
+        <div class="d-flex align-items-left">
+          <button type="button" class="btn btn-sm mr-2 d-lg-none px-3 font-size-16 header-item waves-effect"
+            id="vertical-menu-btn">
+            <i class="fa fa-fw fa-bars"></i>
+          </button>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <div class="dropdown d-inline-block ml-2">
+            <button type="button" class="btn header-item waves-effect text-white" id="page-header-user-dropdown"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="d-none d-sm-inline-block ml-1">{{user.username}}</span>
+              <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item d-flex align-items-center justify-content-between" href="/logout">
+                <span>Log Out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="vertical-menu mm-active">
+      <div data-simplebar="init" class="h-100 mm-show">
+        <div class="simplebar-wrapper" style="margin: 0px;">
+          <div class="simplebar-height-auto-observer-wrapper">
+            <div class="simplebar-height-auto-observer"></div>
+          </div>
+          <div class="simplebar-mask">
+            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+              <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden;">
+                <div class="simplebar-content" style="padding: 0px;">
+                  <div class="navbar-brand-box mt-2 ml-3 text-left">
+                    <a href="index.html" class="logo">
+                      <img height="80" src="{% static 'images/qrlabs-logo-grey.png' %}" alt="" />
+                    </a>
+                  </div>
+
+                  <!--- Sidemenu -->
+                  <div id="sidebar-menu" class="mm-active">
+                    <!-- Left Menu Start -->
+                    <ul class="metismenu list-unstyled mm-show" id="side-menu">
+                      <li class="color-dark menu-title">
+                        <i class="fas fa-qrcode"></i> Qr Codes
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard" class="waves-effect "><i
+                            class="mdi mdi-qrcode-scan"></i><span>Dynamic</span></a>
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard/statics" class="waves-effect"><i
+                            class="mdi mdi-qrcode-scan"></i><span>Static</span></a>
+                      </li>
+
+                      <li class="">
+                        <a href="/dashboard/archived" class="waves-effect "><i
+                            class="feather-trash-2"></i><span>Archived</span></a>
+                      </li>
+
+                      <li class="active__link mm-active">
+                        <a href="/dashboard/folders" class="waves-effect active"><i
+                            class="feather-folder"></i><span>Folders</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Sidebar -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="simplebar-placeholder" style="width: auto; height: 395px;"></div>
+        </div>
+        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+          <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+        </div>
+        <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+          <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="page-content">
+        <div class="container-fluid">
+
+
+          <div class="row">
+            <div class="col-12">
+              <div class="page-title-box d-flex align-items-center justify-content-between">
+                <h4 class="mb-0 font-size-18">Edit Folder</h4>
+                <div class="page-title-right">
+                  <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Folders > edit folders</a>
+                    </li>
+                  </ol>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Edit the Folder.</h4>
+              <p class="card-subtitle mb-4">Name</p>
+              <form action="/editFolder/{{efolder.id}}" method="POST">
+                {% csrf_token %}
+                <div class="col-md-6 search-container">
+
+                  <input type="text" value="{{efolder.name}}" class="form-control" placeholder="Folder Name" name="name" required />
+                  <input type="submit" style="padding-right: 21px;" value="Create"
+                    class="btn btn-primary waves-effect waves-light">
+                </div>
+              </form>
+            </div> <!-- end card-body-->
+          </div>
+
+            <!-- end card-body-->
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Overlay-->
+  <div class="menu-overlay"></div>
+
+  <!-- jQuery  -->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/metismenu.min.js' %}"></script>
+  <script src="{% static 'js/waves.js' %}"></script>
+  <script src="{% static 'js/simplebar.min.js' %}"></script>
+
+  <!-- Morris Js-->
+  <script src="{% static 'js/morris.min.js' %}"></script>
+  <!-- Raphael Js-->
+  <script src="{% static 'js/raphael.min.js' %}"></script>
+
+  <!-- Morris Custom Js-->
+  <script src="{% static 'js/dashboard-demo.js' %}"></script>
+
+  <!-- App js -->
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+
+  <script type="text/javascript">
+    $(".qr__code__style").on("click", function () {
+      $(".qr__code__style").removeClass("active_qr_styling");
+      $(this).addClass("active_qr_styling");
+    });
+    $(".qr__code__eye__style").on("click", function () {
+      $(".qr__code__eye__style").removeClass("active_qr_styling");
+      $(this).addClass("active_qr_styling");
+    });
+
+    $("[data-toggle='modal']").on("click", function () {
+      $("input[name='qrcode_id']").val($(this).val());
+    });
+  </script>
+  <script src="{% static 'js/sweetalert2.min.js' %}"></script>
+
+</body>
+
+</html>
