@@ -116,9 +116,12 @@ class Qrcodes(models.Model):
     # Type Video
     video = models.TextField(null=True)
     # Type pdf
-    pdf = models.TextField(null=True)
-    # Type Images
-    images = models.TextField(null=True)
+    pdf = models.FileField(upload_to='pdf/', null=True)
 
     def __str__(self):
         return self.type
+
+
+class Images(models.Model):
+    image = models.ImageField(upload_to='images/', null=True)
+    qrcode = models.ForeignKey(Qrcodes, on_delete=models.CASCADE)

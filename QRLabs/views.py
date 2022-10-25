@@ -348,8 +348,13 @@ def dashboardCreateSave(request):
                 }
 
             if request.POST['type']=='pdf':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.pdf = request.FILES['pdf']
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
                 data = {
-                    "pdf":request.POST['pdf'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -364,12 +369,20 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='images':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
+                images = request.FILES.getlist('images[]')
+                for img in images:
+                    Images.objects.create(qrcode=qr, image=img)
+
                 data = {
-                    "images":request.POST['images'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -384,7 +397,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='video':
@@ -408,29 +421,40 @@ def dashboardCreateSave(request):
                     
                 }
 
-            
-            r = requests.post(url=API_ENDPOINT, data=data)
-            tex = r.json()['content']
-            uid=str(uuid.uuid4())[:5]
-            
-            qr = Qrcodes(**request.POST.dict(), **extra)
-            svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
-            svgFile.write(tex)
-            svgFile.close()
-            drawing = svg2rlg("mediaaa/svgs/"+str(uid)+'.svg')
-            renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
-            renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
-            renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
-            qr.uuid=uid
-            qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
-            qr.save()
+            if request.POST['type']=='pdf' or request.POST['type']=='images':
+                r = requests.post(url=API_ENDPOINT, data=data)
+                tex = r.json()['content']
+                svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
+                svgFile.write(tex)
+                svgFile.close()
+                drawing = svg2rlg("mediaaa/svgs/"+str(uid)+'.svg')
+                renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
+                renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+                renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+        
+            else:
+                r = requests.post(url=API_ENDPOINT, data=data)
+                tex = r.json()['content']
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
+                svgFile.write(tex)
+                svgFile.close()
+                drawing = svg2rlg("mediaaa/svgs/"+str(uid)+'.svg')
+                renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
+                renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+                renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+                qr.uuid=uid
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
 
 
         else:
-            uid=str(uuid.uuid4())[:5]
-            qr = Qrcodes(**request.POST.dict(), **extra)
-            qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
-            qr.save()
+            if request.POST['type'] != 'pdf' and request.POST['type'] != 'images':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
             
             if request.POST['type']=='link':
                 data = {
@@ -625,8 +649,13 @@ def dashboardCreateSave(request):
                 }
 
             if request.POST['type']=='pdf':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.pdf = request.FILES['pdf']
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
                 data = {
-                    "pdf":request.POST['pdf'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -641,12 +670,19 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='images':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.save()
+                images = request.FILES.getlist('images[]')
+                for img in images:
+                    Images.objects.create(qrcode=qr, image=img)
                 data = {
-                    "images":request.POST['images'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -661,7 +697,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='video':
@@ -1088,48 +1124,59 @@ def editcontentsave(request,objId):
 
 
     if request.POST['type']=='pdf':
-                data = {
-                    "pdf":request.POST['pdf'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.pdf=request.POST['pdf']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.pdf=request.FILES['pdf']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
 
     if request.POST['type']=='images':
-                data = {
-                    "images":request.POST['images'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.images=request.POST['images']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.save()
+        Images.objects.filter(qrcode_id=obj.id).delete()
+        images = request.FILES.getlist('images[]')
+        for img in images:
+            Images.objects.create(qrcode=obj, image=img)
 
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
 
     if request.POST['type']=='video':
         uid=str(uuid.uuid4())[:5]
@@ -1651,7 +1698,7 @@ def getQrCodePreview(request):
 
             if request.POST['type']=='pdf':
                 data = {
-                    "pdf":request.POST['pdf'],
+                    "pdf":request.FILES['pdf'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -2198,7 +2245,7 @@ def preditcontentsave(request,objId):
 
     if request.POST['type']=='pdf':
                 data = {
-                    "pdf":request.POST['pdf'],
+                    "pdf":request.FILES['pdf'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -2215,7 +2262,7 @@ def preditcontentsave(request,objId):
                     "label_font": request.POST['label_font'],
                     "type": request.POST['type']
                 }
-                obj.pdf=request.POST['pdf']
+                obj.pdf=request.FILES['pdf']
 
 
     if request.POST['type']=='images':
@@ -2316,3 +2363,19 @@ def dynamic_qr_code(request, id):
 
     if qr_Data.type == 'video':
         return HttpResponseRedirect(qr_Data.video)
+
+    if qr_Data.type == 'pdf':
+        return HttpResponseRedirect(qr_Data.pdf.url)
+
+    if qr_Data.type == 'images':
+        image_list = Images.objects.filter(qrcode_id=id)
+        image_url_list = []
+
+        for image in image_list:
+            image_url_list.append(image.image.url)
+        base_url = request.build_absolute_uri().split('/qr')[0]
+        image_full_url_list = []
+
+        for image_url in image_url_list:
+            image_full_url_list.append(base_url + image_url)
+        return JsonResponse(image_full_url_list, safe=False)
