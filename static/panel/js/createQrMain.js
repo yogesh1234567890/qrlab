@@ -82,57 +82,57 @@
                     })
             }))
             
-            $("input").on("keyup",
-            (function () {
-                var t, n, r = $(this),
-                o = document.querySelectorAll("[data-basic-input]"),
-                c = document.querySelectorAll("[data-type='".concat($("[name='type']:checked").val(),
-                    "']")), l = 0, i = new FormData;
-                if (c.forEach((function (t) {
-                    return a(t) ? "images" == t.name && t.value ?
-                        void t.files.forEach((function (e) {
-                            i.append("images[]", e)
-                        })) : e(t.name) && t.value ? i.append(t.name, t.files[0]) : void
-                            i.append(t.name, t.value) : l++
-                })), l) return !1;
-                n = "Submitting", (t = r).attr("disabled", !0),
-                    t.text(n), o.forEach((function (e) {
-                        if ("custom_logo" == e.name && e.value)
-                            return i.append(e.name, e.files[0]); i.append(e.name, e.value)
-                    })),
-                    $("[name='status']").is(":checked") && i.append("status", !0),
-                    $("[name='static']").is(":checked") && i.append("static", !0),
-                    $("[name='transparent_code']").is(":checked") && i.append("transparent_code", !0),
-                    $("[name='gradient']").is(":checked") && i.append("gradient", !0),
-                    $("[name='markers_color']").is(":checked") && i.append("markers_color", !0),
-                    $("[name='custom_logo']")[0].files.length > 0 && i.append("custom_logo",
-                        $("[name='custom_logo']")[0].files[0]), $("[name='radial']")
-                            .is(":checked") && i.append("radial", !0), $("[name='no_logo_bg']")
-                                .is(":checked") && i.append("no_logo_bg", !0), i.append("gradient_color",
-                                    $("[name='gradient_color']").val()), i.append("pattern",
-                                        $("[name='pattern']:checked").val()), i.append("marker_out",
-                                            $("[name='marker_out']:checked").val()), i.append("marker_in",
-                                                $("[name='marker_in']:checked").val()), i.append("optionlogo",
-                                                    $("[name='optionlogo']:checked").val()), i.append("outer_frame",
-                                                        $("[name='outer_frame']:checked").val()), i.append("framelabel",
-                                                            $("[name='framelabel']").val()), i.append("label_font",
-                                                                $("[name='label_font']").val()), i.append("type",
-                                                                    $("[name='type']:checked").val()),
-                    // i.append("_token",$("meta[name='csrf']").attr("content")),
-                    $.ajax({
-                        url: "/dashboard/create/save",
-                        type: "POST", processData: !1,
-                        contentType: !1, data: i,
-                        success: function () { window.location.href = "/dashboard" },
-                        error: function () {
-                            !function (e, a) { e.attr("disabled", !1), e.text(a) }(r, "Create"),
-                            Swal.fire({
-                                type: "error", title: "Oops...",
-                                text: "Something went wrong! There was an error update the qrcode. Make sure you filled up the form with correct data.", confirmButtonClass: "btn btn-confirm mt-2"
-                            })
-                        }, xhr: function () { var e = new window.XMLHttpRequest; return e.upload.addEventListener("progress", (function (e) { if (e.lengthComputable) { var a = e.loaded / e.total; $("#create-progress").css("width", 100 * a + "%") } }), !1), e }
-                    })
-            }))
+            // $("input").on("keyup",
+            // (function () {
+            //     var t, n, r = $(this),
+            //     o = document.querySelectorAll("[data-basic-input]"),
+            //     c = document.querySelectorAll("[data-type='".concat($("[name='type']:checked").val(),
+            //         "']")), l = 0, i = new FormData;
+            //     if (c.forEach((function (t) {
+            //         return a(t) ? "images" == t.name && t.value ?
+            //             void t.files.forEach((function (e) {
+            //                 i.append("images[]", e)
+            //             })) : e(t.name) && t.value ? i.append(t.name, t.files[0]) : void
+            //                 i.append(t.name, t.value) : l++
+            //     })), l) return !1;
+            //     n = "Submitting", (t = r).attr("disabled", !0),
+            //         t.text(n), o.forEach((function (e) {
+            //             if ("custom_logo" == e.name && e.value)
+            //                 return i.append(e.name, e.files[0]); i.append(e.name, e.value)
+            //         })),
+            //         $("[name='status']").is(":checked") && i.append("status", !0),
+            //         $("[name='static']").is(":checked") && i.append("static", !0),
+            //         $("[name='transparent_code']").is(":checked") && i.append("transparent_code", !0),
+            //         $("[name='gradient']").is(":checked") && i.append("gradient", !0),
+            //         $("[name='markers_color']").is(":checked") && i.append("markers_color", !0),
+            //         $("[name='custom_logo']")[0].files.length > 0 && i.append("custom_logo",
+            //             $("[name='custom_logo']")[0].files[0]), $("[name='radial']")
+            //                 .is(":checked") && i.append("radial", !0), $("[name='no_logo_bg']")
+            //                     .is(":checked") && i.append("no_logo_bg", !0), i.append("gradient_color",
+            //                         $("[name='gradient_color']").val()), i.append("pattern",
+            //                             $("[name='pattern']:checked").val()), i.append("marker_out",
+            //                                 $("[name='marker_out']:checked").val()), i.append("marker_in",
+            //                                     $("[name='marker_in']:checked").val()), i.append("optionlogo",
+            //                                         $("[name='optionlogo']:checked").val()), i.append("outer_frame",
+            //                                             $("[name='outer_frame']:checked").val()), i.append("framelabel",
+            //                                                 $("[name='framelabel']").val()), i.append("label_font",
+            //                                                     $("[name='label_font']").val()), i.append("type",
+            //                                                         $("[name='type']:checked").val()),
+            //         // i.append("_token",$("meta[name='csrf']").attr("content")),
+            //         $.ajax({
+            //             url: "/dashboard/create/save",
+            //             type: "POST", processData: !1,
+            //             contentType: !1, data: i,
+            //             success: function () { window.location.href = "/dashboard" },
+            //             error: function () {
+            //                 !function (e, a) { e.attr("disabled", !1), e.text(a) }(r, "Create"),
+            //                 Swal.fire({
+            //                     type: "error", title: "Oops...",
+            //                     text: "Something went wrong! There was an error update the qrcode. Make sure you filled up the form with correct data.", confirmButtonClass: "btn btn-confirm mt-2"
+            //                 })
+            //             }, xhr: function () { var e = new window.XMLHttpRequest; return e.upload.addEventListener("progress", (function (e) { if (e.lengthComputable) { var a = e.loaded / e.total; $("#create-progress").css("width", 100 * a + "%") } }), !1), e }
+            //         })
+            // }))
             
             , r(); var o, c = new URL(window.location.href).searchParams; c.get("active") && (o = c.get("active"), $(".active_type").removeClass("active_type"), $(".active_form").removeClass("active_form"), $("[for='".concat(o, "'] .qr-info__tab-content")).addClass("active_type"), $(".qr-info__form-".concat(o)).addClass("active_form"))
 })();
