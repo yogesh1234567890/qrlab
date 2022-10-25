@@ -788,9 +788,265 @@ def unarchiveObj(request,objId):
     return redirect('/dashboard/archived')
 
 def mkstatic(request,objId):
+    API_ENDPOINT = "https://qrsample.qrlab.co/api/generate/qrcode"
     obj = Qrcodes.objects.get(pk=objId)
     obj.isDynamic=False
+    uid=str(uuid.uuid4())[:5]
+    obj.uuid=str(uid)
+    obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
     obj.save()
+    if obj.type=='link':
+        data = {
+            "link_data": obj.link_data,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+    
+    if obj.type=='text':
+        data = {
+            "text_data":obj.text_data,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='email':
+        data = {
+            "email":obj.email,
+            "subject":obj.subject,
+            "message":obj.message,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='call':
+        data = {
+            "country_code":obj.country_code,
+            "phone_number":obj.phone_number,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='sms':
+        data = {
+            "sms_country_code":obj.sms_country_code,
+            "sms_phone_number":obj.sms_phone_number,
+            "sms_message":obj.sms_message,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+            
+    if obj.type=='vcard':
+        data = {
+            "vcard_fname":obj.vcard_fname,
+            "vcard_lname":obj.vcard_lname,
+            "vcard_phone_number":obj.vcard_phone_number,
+            "vcard_email":obj.vcard_email,
+            "vcard_web_url":obj.vcard_web_url,
+            "vcard_mobile":obj.vcard_mobile,
+            "vcard_company":obj.vcard_company,
+            "vcard_job_title":obj.vcard_job_title,
+            "vcard_fax":obj.vcard_fax,
+            "vcard_address":obj.vcard_address,
+            "vcard_city":obj.vcard_city,
+            "vcard_country":obj.vcard_country,
+            "vcard_post_code":obj.vcard_post_code,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='whatsapp':
+        data = {
+            "whatsapp_country_code":obj.whatsapp_country_code,
+            "whatsapp_phone_number":obj.whatsapp_phone_number,
+            "whatsapp_message":obj.whatsapp_message,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='wifi':
+        data = {
+            "network_name":obj.network_name,
+            "network_type":obj.network_type,
+            "network_password":obj.network_password,
+            "wifi_hidden":obj.wifi_hidden,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+
+    if obj.type=='pdf':
+        data = {
+            "link_data": request.build_absolute_uri('/') + obj.pdf.url,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": 'link'
+        }
+
+    if obj.type=='images':
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/' + str(obj.id),
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": 'link'
+        }
+
+    if obj.type=='video':
+        data = {
+            "link_data": obj.video,
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": 'link'
+        }
+
+        
+    r = requests.post(url=API_ENDPOINT, data=data)
+    tex = r.json()['content']
+    svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
+    svgFile.write(tex)
+    svgFile.close()
+    drawing = svg2rlg("mediaaa/svgs/"+str(uid)+'.svg')
+    renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
+    renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+    renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
     return redirect('/dashboard/statics')
 
 def mkdynamic(request,objId):
@@ -1738,7 +1994,7 @@ def getQrCodePreview(request):
 
             if request.POST['type']=='video':
                 data = {
-                    "video":request.POST['video'],
+                    "link_data":request.POST['video'],
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -1753,8 +2009,7 @@ def getQrCodePreview(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                    
+                    "type": 'link'
                 }
 
             
@@ -2369,13 +2624,4 @@ def dynamic_qr_code(request, id):
 
     if qr_Data.type == 'images':
         image_list = Images.objects.filter(qrcode_id=id)
-        image_url_list = []
-
-        for image in image_list:
-            image_url_list.append(image.image.url)
-        base_url = request.build_absolute_uri().split('/qr')[0]
-        image_full_url_list = []
-
-        for image_url in image_url_list:
-            image_full_url_list.append(base_url + image_url)
-        return JsonResponse(image_full_url_list, safe=False)
+        return render(request, 'image_list.html', {'images': image_list})
