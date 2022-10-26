@@ -28,8 +28,8 @@ from django.http.response import HttpResponseRedirectBase
 def index(request):
     qrs=Qrcodes.objects.all()
     i=[]
-    for obj in qrs :
-        i.append(obj)
+    # for obj in qrs :
+    #     i.append(obj)
     return render(request, 'index.html',{'scans':len(i)})
 
 
@@ -98,8 +98,8 @@ def dashboard(request):
     if request.user.is_authenticated:
         qrs = Qrcodes.objects.filter(user_id=request.user, isDynamic=True, archived=False)
         qrcs=[]
-        for obj in qrs :
-            qrcs.append(obj)
+        # for obj in qrs :
+        #     qrcs.append(obj)
 
         qrcs.reverse()
         folder=Folder.objects.filter(user_id=request.user)

@@ -29,7 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 # ALLOWED_HOSTS = ['192.168.1.66', '*']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['qrcode.testingdigiquag.fun']
 
 
 # Application definition
@@ -86,6 +86,16 @@ DATABASES = {
     }
 }
 
+DATABASES = {  
+	'default': {     
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',       
+		'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT')
+	}
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -122,8 +132,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles/')
 STATICFILES_DIRS = [
-    "static/",
+    os.path.join(BASE_DIR, 'static')
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
