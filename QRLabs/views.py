@@ -730,9 +730,8 @@ def dashboardCreateSave(request):
         return JsonResponse({
                 'success': 'Successfully created a Qrcode.',
             })
-    return JsonResponse({
-    'failed': 'failed to create a Qrcode.',
-    }, status=404)
+    else:
+        return redirect('loginPage')
 
 
 def dashboardlock(request):
@@ -1739,7 +1738,7 @@ def editshapesave(request,objId):
     return redirect('/')
 @csrf_exempt
 def getQrCodePreview(request):
-    if request.user.is_authenticated:
+    # if request.user.is_authenticated:
             extra = {'user_id': request.user}
             # import requests
             API_ENDPOINT = "https://qrsample.qrlab.co/api/generate/qrcode"
