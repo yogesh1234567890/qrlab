@@ -1,0 +1,117 @@
+{% load static %}
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="/vcard/favicon.ico" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,301,300,400&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css"
+      integrity="sha512-5PV92qsds/16vyYIJo3T/As4m2d8b6oWYfoqV+vtizRB6KhF1F9kYzWzQmsO6T3z3QG2Xdhrx7FQ+5R1LiQdUA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>vcard</title>
+    <link href="{% static 'css/1.css' %}" rel="stylesheet" />
+  </head>
+  <body data-new-gr-c-s-check-loaded="14.1085.0" data-gr-ext-installed="">
+    <noscript
+      ><strong
+        >We're sorry but vcard doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong
+      ></noscript
+    >
+    <div class="container">
+      <header class="header">
+        <nav>
+          <span class="save-btn"> Save <i class="bi bi-save2"></i></span>
+        </nav>
+      </header>
+      <div class="content">
+        <div class="dp">
+          <img src="https://qrlab.co/vcard/img/dp.d2c0a9c3.png" alt="User profile picture" />
+          <h3>{{vcard_data.vcard_fname}} {{vcard_data.vcard_lname}}</h3>
+          <p>{{vcard_data.vcard_job_title}}</p>
+        </div>
+        <div class="info">
+          <p class="title">Website</p>
+          <p class="data space">
+            <a href="{{vcard_data.vcard_web_url}}">{{vcard_data.vcard_web_url}}</a>
+          </p>
+          <p class="title">Email Address</p>
+          <p class="data space">
+            <a href="mailto:{{vcard_data.vcard_email}}" class="mail"
+              >{{vcard_data.vcard_email}}</a
+            >
+          </p>
+          <p class="title">Phone Number</p>
+          <p class="data">{{vcard_data.vcard_phone_number}}</p>
+          <p class="title">Work</p>
+          <p class="data">{{vcard_data.vcard_company}}</p>
+          <p class="title">Mobile number</p>
+          <p class="data">{{vcard_data.vcard_mobile}}</p>
+          <p class="title">Fax</p>
+          <p class="data">{{vcard_data.vcard_fax}}</p>
+          <p class="title">Address</p>
+          <p class="data">{{vcard_data.vcard_address}}</p>
+          <div class="data-group">
+            <div>
+              <p class="title">City</p>
+              <p class="data">{{vcard_data.vcard_city}}</p>
+            </div>
+            <div>
+              <p class="title">Post Code</p>
+              <p class="data">{{vcard_data.vcard_post_code}}</p>
+            </div>
+            <div>
+              <p class="title">Country</p>
+              <p class="data">{{vcard_data.vcard_country}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <a href="#" class="social-link"
+            ><i class="bi bi-facebook"></i></a
+          ><a href="#" class="social-link"
+            ><i class="bi bi-twitter"></i></a
+          ><a href="#" class="social-link"
+            ><i class="bi bi-instagram"></i></a
+          ><i class="bi bi-three-dots-vertical more-socials"
+            ><div class="extra-social-medias">
+              <a
+                href="#"
+                class="social-link"
+                style="--pop-delay: 0.25s;"
+                ><i class="bi bi-linkedin"></i></a
+              ><a
+                href="#"
+                class="social-link"
+                style="--pop-delay: 0.2s;"
+                ><i class="bi bi-pinterest"></i></a
+              ><a
+                href="#"
+                class="social-link"
+                style="--pop-delay: 0.15s;"
+                ><i class="bi bi-youtube"></i></a
+              ><a
+                href="#"
+                class="social-link"
+                style="--pop-delay: 0.1s;"
+                ><i class="bi bi-snapchat"></i></a
+              ><a
+                href="#"
+                class="social-link"
+                style="--pop-delay: 0.05s;"
+                ><i class="bi bi-reddit"></i
+              ></a></div
+          ></i>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

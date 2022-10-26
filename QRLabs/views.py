@@ -271,20 +271,25 @@ def dashboardCreateSave(request):
                 }
             
             if request.POST['type']=='vcard':
+                uid=str(uuid.uuid4())[:5]
+                qr = Qrcodes(**request.POST.dict(), **extra)
+                qr.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+                qr.vcard_fname = request.POST['vcard_fname']
+                qr.vcard_lname = request.POST['vcard_lname']
+                qr.vcard_phone_number = request.POST['vcard_phone_number']
+                qr.vcard_email = request.POST['vcard_email']
+                qr.vcard_web_url = request.POST['vcard_web_url']
+                qr.vcard_mobile = request.POST['vcard_mobile']
+                qr.vcard_company = request.POST['vcard_company']
+                qr.vcard_job_title = request.POST['vcard_job_title']
+                qr.vcard_fax = request.POST['vcard_fax']
+                qr.vcard_address = request.POST['vcard_address']
+                qr.vcard_city = request.POST['vcard_city']
+                qr.vcard_country = request.POST['vcard_country']
+                qr.vcard_post_code = request.POST['vcard_post_code']
+                qr.save()
                 data = {
-                    "vcard_fname":request.POST['vcard_fname'],
-                    "vcard_lname":request.POST['vcard_lname'],
-                    "vcard_phone_number":request.POST['vcard_phone_number'],
-                    "vcard_email":request.POST['vcard_email'],
-                    "vcard_web_url":request.POST['vcard_web_url'],
-                    "vcard_mobile":request.POST['vcard_mobile'],
-                    "vcard_company":request.POST['vcard_company'],
-                    "vcard_job_title":request.POST['vcard_job_title'],
-                    "vcard_fax":request.POST['vcard_fax'],
-                    "vcard_address":request.POST['vcard_address'],
-                    "vcard_city":request.POST['vcard_city'],
-                    "vcard_country":request.POST['vcard_country'],
-                    "vcard_post_code":request.POST['vcard_post_code'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -299,7 +304,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": 'link'
                 }
 
             if request.POST['type']=='whatsapp':
@@ -421,7 +426,7 @@ def dashboardCreateSave(request):
                     
                 }
 
-            if request.POST['type']=='pdf' or request.POST['type']=='images':
+            if request.POST['type']=='pdf' or request.POST['type']=='images' or request.POST['type']=='vcard':
                 r = requests.post(url=API_ENDPOINT, data=data)
                 tex = r.json()['content']
                 svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
@@ -570,19 +575,7 @@ def dashboardCreateSave(request):
             
             if request.POST['type']=='vcard':
                 data = {
-                    "vcard_fname":request.POST['vcard_fname'],
-                    "vcard_lname":request.POST['vcard_lname'],
-                    "vcard_phone_number":request.POST['vcard_phone_number'],
-                    "vcard_email":request.POST['vcard_email'],
-                    "vcard_web_url":request.POST['vcard_web_url'],
-                    "vcard_mobile":request.POST['vcard_mobile'],
-                    "vcard_company":request.POST['vcard_company'],
-                    "vcard_job_title":request.POST['vcard_job_title'],
-                    "vcard_fax":request.POST['vcard_fax'],
-                    "vcard_address":request.POST['vcard_address'],
-                    "vcard_city":request.POST['vcard_city'],
-                    "vcard_country":request.POST['vcard_country'],
-                    "vcard_post_code":request.POST['vcard_post_code'],
+                    "link_data": request.build_absolute_uri('/') + 'qr/'+str(qr.id),
                     "bg_color": request.POST['bg_color'],
                     "frontcolor": request.POST['frontcolor'],
                     "gradient_color": request.POST['gradient_color'],
@@ -597,7 +590,7 @@ def dashboardCreateSave(request):
                     "outer_frame": request.POST['outer_frame'],
                     "framelabel": request.POST['framelabel'],
                     "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
+                    "type": "link"
                 }
 
             if request.POST['type']=='whatsapp':
@@ -902,19 +895,7 @@ def mkstatic(request,objId):
             
     if obj.type=='vcard':
         data = {
-            "vcard_fname":obj.vcard_fname,
-            "vcard_lname":obj.vcard_lname,
-            "vcard_phone_number":obj.vcard_phone_number,
-            "vcard_email":obj.vcard_email,
-            "vcard_web_url":obj.vcard_web_url,
-            "vcard_mobile":obj.vcard_mobile,
-            "vcard_company":obj.vcard_company,
-            "vcard_job_title":obj.vcard_job_title,
-            "vcard_fax":obj.vcard_fax,
-            "vcard_address":obj.vcard_address,
-            "vcard_city":obj.vcard_city,
-            "vcard_country":obj.vcard_country,
-            "vcard_post_code":obj.vcard_post_code,
+            "link_data": request.build_absolute_uri('/') + 'qr/' + str(obj.id),
             "bg_color": obj.bg_color,
             "frontcolor": obj.frontcolor,
             "gradient_color": obj.gradient_color,
@@ -929,7 +910,7 @@ def mkstatic(request,objId):
             "outer_frame": obj.outer_frame,
             "framelabel": obj.framelabel,
             "label_font": obj.label_font,
-            "type": obj.type
+            "type": "link"
         }
 
     if obj.type=='whatsapp':
@@ -1271,49 +1252,42 @@ def editcontentsave(request,objId):
 
 
     if request.POST['type']=='vcard':
-                data = {
-                    "vcard_fname":request.POST['vcard_fname'],
-                    "vcard_lname":request.POST['vcard_lname'],
-                    "vcard_phone_number":request.POST['vcard_phone_number'],
-                    "vcard_email":request.POST['vcard_email'],
-                    "vcard_web_url":request.POST['vcard_web_url'],
-                    "vcard_mobile":request.POST['vcard_mobile'],
-                    "vcard_company":request.POST['vcard_company'],
-                    "vcard_job_title":request.POST['vcard_job_title'],
-                    "vcard_fax":request.POST['vcard_fax'],
-                    "vcard_address":request.POST['vcard_address'],
-                    "vcard_city":request.POST['vcard_city'],
-                    "vcard_country":request.POST['vcard_country'],
-                    "vcard_post_code":request.POST['vcard_post_code'],
-                    "bg_color": request.POST['bg_color'],
-                    "frontcolor": request.POST['frontcolor'],
-                    "gradient_color": request.POST['gradient_color'],
-                    "marker_out_color": request.POST['marker_out_color'],
-                    "marker_in_color": request.POST['marker_in_color'],
-                    "custom_logo": request.POST['custom_logo'],
-                    "framecolor": request.POST['framecolor'],
-                    "pattern": request.POST['pattern'],
-                    "marker_out": request.POST['marker_out'],
-                    "marker_in": request.POST['marker_in'],
-                    "optionlogo": request.POST['optionlogo'],
-                    "outer_frame": request.POST['outer_frame'],
-                    "framelabel": request.POST['framelabel'],
-                    "label_font": request.POST['label_font'],
-                    "type": request.POST['type']
-                }
-                obj.vcard_fname=request.POST['vcard_fname']
-                obj.vcard_lname=request.POST['vcard_lname']
-                obj.vcard_phone_number=request.POST['vcard_phone_number']
-                obj.vcard_email=request.POST['vcard_email']
-                obj.vcard_web_url=request.POST['vcard_web_url']
-                obj.vcard_company=request.POST['vcard_company']
-                obj.vcard_job_title=request.POST['vcard_job_title']
-                obj.vcard_fax=request.POST['vcard_fax']
-                obj.vcard_address=request.POST['vcard_address']
-                obj.vcard_city=request.POST['vcard_city']
-                obj.vcard_country=request.POST['vcard_country']
-                obj.vcard_post_code=request.POST['vcard_post_code']
-                obj.vcard_mobile=request.POST['vcard_mobile']
+        uid=str(uuid.uuid4())[:5]
+        obj.uuid=str(uid)
+        obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+        obj.vcard_fname=request.POST['vcard_fname']
+        obj.vcard_lname=request.POST['vcard_lname']
+        obj.vcard_phone_number=request.POST['vcard_phone_number']
+        obj.vcard_email=request.POST['vcard_email']
+        obj.vcard_web_url=request.POST['vcard_web_url']
+        obj.vcard_company=request.POST['vcard_company']
+        obj.vcard_job_title=request.POST['vcard_job_title']
+        obj.vcard_fax=request.POST['vcard_fax']
+        obj.vcard_address=request.POST['vcard_address']
+        obj.vcard_city=request.POST['vcard_city']
+        obj.vcard_country=request.POST['vcard_country']
+        obj.vcard_post_code=request.POST['vcard_post_code']
+        obj.vcard_mobile=request.POST['vcard_mobile']
+        obj.save()
+        data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            "bg_color": request.POST['bg_color'],
+            "frontcolor": request.POST['frontcolor'],
+            "gradient_color": request.POST['gradient_color'],
+            "marker_out_color": request.POST['marker_out_color'],
+            "marker_in_color": request.POST['marker_in_color'],
+            "custom_logo": request.POST['custom_logo'],
+            "framecolor": request.POST['framecolor'],
+            "pattern": request.POST['pattern'],
+            "marker_out": request.POST['marker_out'],
+            "marker_in": request.POST['marker_in'],
+            "optionlogo": request.POST['optionlogo'],
+            "outer_frame": request.POST['outer_frame'],
+            "framelabel": request.POST['framelabel'],
+            "label_font": request.POST['label_font'],
+            "type": 'link'
+        }
+        
 
 
     if request.POST['type']=='whatsapp':
@@ -2625,3 +2599,7 @@ def dynamic_qr_code(request, id):
     if qr_Data.type == 'images':
         image_list = Images.objects.filter(qrcode_id=id)
         return render(request, 'image_list.html', {'images': image_list})
+
+    if qr_Data.type== 'vcard':
+        vcard_data = Qrcodes.objects.get(id=id)
+        return render(request, 'vcard.html', {'vcard_data': vcard_data})
