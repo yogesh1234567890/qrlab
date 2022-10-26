@@ -147,9 +147,9 @@
                 <div class="qr-code">
                   <div class="left">
                     <img width="200" height="200" src="{% static obj.qrCodeimage %}" alt="">
-                    <a target="_blank"
+                    <!-- <a target="_blank"
                       href="/qr-code/view/b8cc3c4d44d685db9fc2c25699ca3c679528f407eeaa6eddb1a4300597bbe221">View Qr
-                      Code</a>
+                      Code</a> -->
                     <a href="{% url 'dashboarddownload' obj.id %}" download="{% url 'dashboarddownload' obj.id %}" class="btn btn-outline-info btn-block">Download</a>
                   </div>
                   <div class="right">
