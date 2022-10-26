@@ -16,7 +16,7 @@ class Qrcodes(models.Model):
     uuid = models.CharField(max_length=1000,default='man')
     id = models.AutoField(primary_key=True)
     staticsss=models.BooleanField(default=False)
-    created_at=models.DateTimeField(default=datetime.now())
+    created_at=models.DateTimeField(auto_now_add=True)
     main_title = models.CharField(max_length=250, default='Untitled')
     qrname = models.CharField(max_length=250, default='Untitled')
     qrData=models.CharField(max_length=10000000000, default='')
