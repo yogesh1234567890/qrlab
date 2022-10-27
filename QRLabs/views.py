@@ -2556,8 +2556,10 @@ def dynamic_qr_code(request, id):
     qr_Data.scans = qr_Data.scans + 1
     qr_Data.save()
     if qr_Data.type == 'link':
-        return redirect(qr_Data.link_data)
-
+        if qr_Data.link_data:
+            return HttpResponseRedirect(qr_Data.link_data)
+        else:
+            return render(request, 'create-social.html')
     if qr_Data.type == 'email':
         email_url = 'mailto:' + qr_Data.email + '?subject=' + qr_Data.subject + '&body=' + qr_Data.message
         return HttpResponseRedirect(email_url)
@@ -2683,6 +2685,7 @@ def social_media_create(request):
             
 
         data={
+            'user_id': request.user,
             'full_name': name,
             'title': title,
             'email': email,
@@ -2706,9 +2709,60 @@ def social_media_create(request):
             'social_reddit_link': social_reddit_link,
             'social_other_link_title': social_other_link_title,
             'social_other_link': social_other_link,
-            'profile_picture': image
+            'profile_picture': image,
+            'type' : 'link',
+            'bg_color': '#ffffff', 
+            'frontcolor': '#000000', 
+            'gradient_color': '#000000', 
+            'marker_out_color': '#000000', 
+            'marker_in_color': '#000000', 
+            'custom_logo': '', 
+            'framecolor': '#000000', 
+            'pattern': 'default', 
+            'marker_out': 'default', 
+            'marker_in': 'default', 
+            'optionlogo': 'none', 
+            'outer_frame': 'none', 
+            'framelabel': '', 
+            'label_font': 'AbrilFatface.svg', 
         }
-        Qrcodes.objects.create(**data)
-        #hard redirect to dashboard
-        return HttpResponseRedirect('/dashboard')
+        qrid = Qrcodes.objects.create(**data)
+        return JsonResponse({'id': qrid.id}, status=200)
     return render(request, 'create-social.html')
+
+def social_media(request, id):
+    obj = Qrcodes.objects.get(id=id)
+    API_ENDPOINT = "https://qrsample.qrlab.co/api/generate/qrcode"
+    data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
+            "bg_color": obj.bg_color,
+            "frontcolor": obj.frontcolor,
+            "gradient_color": obj.gradient_color,
+            "marker_out_color": obj.marker_out_color,
+            "marker_in_color": obj.marker_in_color,
+            "custom_logo": obj.custom_logo,
+            "framecolor": obj.framecolor,
+            "pattern": obj.pattern,
+            "marker_out": obj.marker_out,
+            "marker_in": obj.marker_in,
+            "optionlogo": obj.optionlogo,
+            "outer_frame": obj.outer_frame,
+            "framelabel": obj.framelabel,
+            "label_font": obj.label_font,
+            "type": obj.type
+        }
+    r = requests.post(url=API_ENDPOINT, data=data)
+    tex = r.json()['content']
+    uid=str(uuid.uuid4())[:5]
+    svgFile=open("mediaaa/svgs/"+str(uid)+'.svg',"w")
+    svgFile.write(tex)
+    svgFile.close()
+    drawing = svg2rlg("mediaaa/svgs/"+str(uid)+'.svg')
+    renderPDF.drawToFile(drawing, "mediaaa/pdfs/"+str(uid)+".pdf")
+    renderPM.drawToFile(drawing, "mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+    renderPM.drawToFile(drawing, "static/mediaaa/pngs/"+str(uid)+".png", fmt="PNG")
+    obj.uuid=uid
+    obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
+    obj.isDynamic=True
+    obj.save()
+    return redirect('dashboard')

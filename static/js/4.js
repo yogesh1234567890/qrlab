@@ -42,9 +42,10 @@ function sendData(data) {
   XHR.onreadystatechange = function () {
     if (XHR.readyState === 4) {
       if (XHR.status === 200) {
-        window.location.href = "/dashboard";
+        social_id = JSON.parse(XHR.responseText).id;
+        window.location.href = "/social-media/" + social_id;
       } else {
-        window.location.href = "/error";
+        console.log(XHR.responseText);
       }
     }
   };

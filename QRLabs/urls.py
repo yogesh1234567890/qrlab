@@ -58,6 +58,7 @@ urlpatterns = [
 
     path('qr/<int:id>', views.dynamic_qr_code, name='dynamicqr'),
     path('socialmedia/create/', views.social_media_create, name='social_media_create'),
+    path('social-media/<int:id>', views.social_media, name='social_media'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
