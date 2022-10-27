@@ -95,6 +95,11 @@ class Qrcodes(models.Model):
     network_password = models.TextField(null=True)
     wifi_hidden = models.TextField(null=True)
     # Type Social Link
+    full_name = models.CharField(max_length=250, null=True)
+    title = models.TextField(null=True)
+    email = models.EmailField(max_length=250, null=True)
+    phone_number = models.CharField(max_length=250, null=True)
+    website = models.CharField(max_length=250, null=True)
     social_facebook_link_title = models.CharField(max_length=250, null=True)
     social_twitter_link_title = models.CharField(max_length=250, null=True)
     social_instagram_link_title = models.CharField(max_length=250, null=True)
@@ -103,6 +108,7 @@ class Qrcodes(models.Model):
     social_youtube_link_title = models.CharField(max_length=250, null=True)
     social_snapchat_link_title = models.CharField(max_length=250, null=True)
     social_reddit_link_title = models.CharField(max_length=250, null=True)
+    social_other_link_title = models.CharField(max_length=250, null=True)
     social_facebook_link = models.CharField(max_length=250, null=True)
     social_twitter_link = models.CharField(max_length=250, null=True)
     social_instagram_link = models.CharField(max_length=250, null=True)
@@ -111,15 +117,16 @@ class Qrcodes(models.Model):
     social_youtube_link = models.CharField(max_length=250, null=True)
     social_snapchat_link = models.CharField(max_length=250, null=True)
     social_reddit_link = models.CharField(max_length=250, null=True)
+    social_other_link = models.CharField(max_length=250, null=True)
     social_bg_color = models.CharField(max_length=250, null=True)
-    social_logo = models.TextField(null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures', null=True)
     # Type Video
     video = models.TextField(null=True)
     # Type pdf
     pdf = models.FileField(upload_to='pdf/', null=True)
 
-    def __str__(self):
-        return self.type
+    # def __str__(self):
+    #     return self.type
 
 
 class Images(models.Model):

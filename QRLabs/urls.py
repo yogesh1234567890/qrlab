@@ -57,6 +57,7 @@ urlpatterns = [
     path('preditcontentsave/<str:objId>', views.preditcontentsave, name='preditcontentsave'),
 
     path('qr/<int:id>', views.dynamic_qr_code, name='dynamicqr'),
+    path('socialmedia/create/', views.social_media_create, name='social_media_create'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,

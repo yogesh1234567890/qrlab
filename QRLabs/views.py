@@ -1,6 +1,10 @@
 from copy import error
 import email
 from email import message
+import json
+import base64
+import uuid
+from django.core.files.base import ContentFile
 from turtle import title
 from unicodedata import name
 from xml.dom.pulldom import ErrorHandler
@@ -2602,3 +2606,109 @@ def dynamic_qr_code(request, id):
     if qr_Data.type== 'vcard':
         vcard_data = Qrcodes.objects.get(id=id)
         return render(request, 'vcard.html', {'vcard_data': vcard_data})
+        
+def to_internal_value(base):
+    format, data = base.split(';base64,')
+    file_name = str(uuid.uuid4())[:12]
+    ext = format.split('/')[-1]
+    complete_file_name = "%s.%s" % (
+        file_name,
+        ext,
+    )
+    data = ContentFile(base64.b64decode(data), name=complete_file_name)
+    return data
+    
+@csrf_exempt
+def social_media_create(request):
+    if request.method == 'POST':
+        data = request.POST.get('dp')
+        if data:
+            image = to_internal_value(data)
+        else:
+            image = None
+        name = request.POST.get('name')
+        title = request.POST.get('title')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        website = request.POST.get('website')
+        social_links = request.POST.get('socialLinks')
+        social_links = json.loads(social_links)
+
+        social_facebook_link_title = ''
+        social_facebook_link = ''
+        social_twitter_link_title = ''
+        social_twitter_link = ''
+        social_instagram_link_title = ''
+        social_instagram_link   = ''
+        social_linkedin_link_title  = ''
+        social_linkedin_link= ''
+        social_pinterest_link_title= ''
+        social_pinterest_link= ''
+        social_youtube_link_title= ''
+        social_youtube_link= ''
+        social_snapchat_link_title= ''
+        social_snapchat_link= ''
+        social_reddit_link_title= ''
+        social_reddit_link= ''
+        social_other_link_title= ''
+        social_other_link= ''
+        for i in social_links:
+            if i['icon'] == 'facebook':
+                social_facebook_link_title = i['title']
+                social_facebook_link = i['link']
+            if i['icon'] == 'twitter':
+                social_twitter_link_title = i['title']
+                social_twitter_link = i['link']
+            if i['icon'] == 'instagram':
+                social_instagram_link_title = i['title']
+                social_instagram_link = i['link']
+            if i['icon'] == 'linkedin':
+                social_linkedin_link_title = i['title']
+                social_linkedin_link = i['link']
+            if i['icon'] == 'pinterest':
+                social_pinterest_link_title = i['title']
+                social_pinterest_link = i['link']
+            if i['icon'] == 'youtube':
+                social_youtube_link_title = i['title']
+                social_youtube_link = i['link']
+            if i['icon'] == 'snapchat':
+                social_snapchat_link_title = i['title']
+                social_snapchat_link = i['link']
+            if i['icon'] == 'reddit':
+                social_reddit_link_title = i['title']
+                social_reddit_link = i['link']
+            else:
+                social_other_link_title = i['title']
+                social_other_link = i['link']
+            
+
+        data={
+            'full_name': name,
+            'title': title,
+            'email': email,
+            'phone_number': phone,
+            'website': website,
+            'social_facebook_link_title': social_facebook_link_title,
+            'social_facebook_link': social_facebook_link,
+            'social_twitter_link_title': social_twitter_link_title,
+            'social_twitter_link': social_twitter_link,
+            'social_instagram_link_title': social_instagram_link_title,
+            'social_instagram_link': social_instagram_link,
+            'social_linkedin_link_title': social_linkedin_link_title,
+            'social_linkedin_link': social_linkedin_link,
+            'social_pinterest_link_title': social_pinterest_link_title,
+            'social_pinterest_link': social_pinterest_link,
+            'social_youtube_link_title': social_youtube_link_title,
+            'social_youtube_link': social_youtube_link,
+            'social_snapchat_link_title': social_snapchat_link_title,
+            'social_snapchat_link': social_snapchat_link,
+            'social_reddit_link_title': social_reddit_link_title,
+            'social_reddit_link': social_reddit_link,
+            'social_other_link_title': social_other_link_title,
+            'social_other_link': social_other_link,
+            'profile_picture': image
+        }
+        Qrcodes.objects.create(**data)
+        #hard redirect to dashboard
+        return HttpResponseRedirect('/dashboard')
+    return render(request, 'create-social.html')
