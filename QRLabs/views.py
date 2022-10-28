@@ -2559,7 +2559,41 @@ def dynamic_qr_code(request, id):
         if qr_Data.link_data:
             return HttpResponseRedirect(qr_Data.link_data)
         else:
-            return render(request, 'create-social.html')
+            image = qr_Data.profile_picture
+            image = base64.b64encode(image.read())
+            asa = 'data:image/png;base64,'
+            asa = asa.encode('utf-8')
+            image = asa + image
+            image = image.decode('utf-8')
+            data={}
+            data['dp']=image
+            data['name']=qr_Data.full_name
+            data['title']=qr_Data.title
+            data['email']=qr_Data.email
+            data['phone']=qr_Data.phone_number
+            data['website']=qr_Data.website
+            socialLinks=[]
+            if qr_Data.social_facebook_link_title:
+                socialLinks.append({"title":qr_Data.social_facebook_link_title,"icon":"facebook","link":qr_Data.social_facebook_link})
+            if qr_Data.social_twitter_link_title:
+                socialLinks.append({"title":qr_Data.social_twitter_link_title,"icon":"twitter","link":qr_Data.social_twitter_link})
+            if qr_Data.social_instagram_link_title:
+                socialLinks.append({"title":qr_Data.social_instagram_link_title,"icon":"instagram","link":qr_Data.social_instagram_link})
+            if qr_Data.social_linkedin_link_title:
+                socialLinks.append({"title":qr_Data.social_linkedin_link_title,"icon":"linkedin","link":qr_Data.social_linkedin_link})
+            if qr_Data.social_pinterest_link_title:
+                socialLinks.append({"title":qr_Data.social_pinterest_link_title,"icon":"pinterest","link":qr_Data.social_pinterest_link})
+            if qr_Data.social_youtube_link_title:
+                socialLinks.append({"title":qr_Data.social_youtube_link_title,"icon":"youtube","link":qr_Data.social_youtube_link})
+            if qr_Data.social_snapchat_link_title:
+                socialLinks.append({"title":qr_Data.social_snapchat_link_title,"icon":"snapchat","link":qr_Data.social_snapchat_link})
+            if qr_Data.social_reddit_link_title:
+                socialLinks.append({"title":qr_Data.social_reddit_link_title,"icon":"reddit","link":qr_Data.social_reddit_link})
+            if qr_Data.social_other_link_title:
+                socialLinks.append({"title":qr_Data.social_other_link_title,"icon":"globe","link":qr_Data.social_other_link})
+            data['socialLinks']=socialLinks
+
+            return render(request, 'display-social.html', {'data': data})
     if qr_Data.type == 'email':
         email_url = 'mailto:' + qr_Data.email + '?subject=' + qr_Data.subject + '&body=' + qr_Data.message
         return HttpResponseRedirect(email_url)
