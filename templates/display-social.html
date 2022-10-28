@@ -100,14 +100,19 @@
         postEl.querySelector(".user-name").textContent = name;
         let userInfoHtml,
           socialLinkHtml = "";
+          if (dp) {
+          userInfoHtml += `<img src=${dp} alt="" class="user-dp" data-v-69f60277="" style="--dp-border:rgb(114, 73, 54);"/>`;
+        }
         Object.keys(newObj).map((info) => {
-          userInfoHtml += `<p data-v-69f60277>
-          <span data-v-69f60277>
-                ${info.toString().replace(/([a-z](?=[A-Z]))/g, "$1 ")}:
-              </span>
-              <span data-v-69f60277>${datas[info]}</span>
-        </p>
-            `;
+          if (info != "dp") {
+            userInfoHtml += `<p data-v-69f60277>
+           <span data-v-69f60277>
+                 ${info.toString().replace(/([a-z](?=[A-Z]))/g, "$1 ")}:
+               </span>
+               <span data-v-69f60277>${datas[info]}</span>
+         </p>
+             `;
+          }
         });
 
         function icon(socialLink, className) {

@@ -2559,12 +2559,7 @@ def dynamic_qr_code(request, id):
         if qr_Data.link_data:
             return HttpResponseRedirect(qr_Data.link_data)
         else:
-            image = qr_Data.profile_picture
-            image = base64.b64encode(image.read())
-            asa = 'data:image/png;base64,'
-            asa = asa.encode('utf-8')
-            image = asa + image
-            image = image.decode('utf-8')
+            image = qr_Data.profile_picture.url
             data={}
             data['dp']=image
             data['name']=qr_Data.full_name
