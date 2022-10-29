@@ -24,6 +24,11 @@
     max-height: 70%;
   }
 }
+@media (max-width: 650px) {
+  .preview__page {
+    height: 100% !important;
+  }
+}
 @media (max-width: 576px) {
   .navbar .logo {
     max-height: 80%;
@@ -173,6 +178,16 @@
   overflow: auto;
   max-height: 600px;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .phone-mockup-container .phone-mockup-phone {
+    width: 100%;
+    max-width: 280px;
+    height: 100%;
+    overflow: auto;
+    max-height: 600px;
+  }
 }
 .phone-mockup-phone-img {
   position: absolute;
