@@ -52,6 +52,7 @@
     </div>
   </body>
   <script>
+    var icons = ['facebook','twitter','instagram','linkedin','pinterest','youtube','snapchat','reddit', 'globe']
     var data = {{data|safe}};
     //get socialLinks from data
     var socialLinks = data.socialLinks;
@@ -62,7 +63,12 @@
       var socialLinkName = socialLink.title;
       var socialLinkUrl = socialLink.link;
       var socialLinkIcon = socialLink.icon;
+      if (icons.indexOf(socialLinkIcon) == -1) {
+        var socialLinkHtml = `<a href="${socialLinkUrl}" class="user-social" style="--animate-delay: 0.15s;"><i class="icon"><img style="width: 40px;" src=${socialLinkIcon}></i><span class="text">${socialLinkName}</span><span class="visit-btn"><i class="bi bi-box-arrow-right"></i></span></a>`;
+      }
+      else{
       var socialLinkHtml = `<a href="${socialLinkUrl}" class="user-social" style="--animate-delay: 0.15s;"><i class="icon bi-${socialLinkIcon}"></i><span class="text">${socialLinkName}</span><span class="visit-btn"><i class="bi bi-box-arrow-right"></i></span></a>`;
+      }
       document.querySelector(".user-socials").innerHTML += socialLinkHtml;
     }
 

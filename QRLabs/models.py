@@ -108,7 +108,7 @@ class Qrcodes(models.Model):
     social_youtube_link_title = models.CharField(max_length=250, null=True)
     social_snapchat_link_title = models.CharField(max_length=250, null=True)
     social_reddit_link_title = models.CharField(max_length=250, null=True)
-    social_other_link_title = models.CharField(max_length=250, null=True)
+    
     social_facebook_link = models.CharField(max_length=250, null=True)
     social_twitter_link = models.CharField(max_length=250, null=True)
     social_instagram_link = models.CharField(max_length=250, null=True)
@@ -117,7 +117,7 @@ class Qrcodes(models.Model):
     social_youtube_link = models.CharField(max_length=250, null=True)
     social_snapchat_link = models.CharField(max_length=250, null=True)
     social_reddit_link = models.CharField(max_length=250, null=True)
-    social_other_link = models.CharField(max_length=250, null=True)
+
     social_bg_color = models.CharField(max_length=250, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures', null=True)
     # Type Video
@@ -128,6 +128,14 @@ class Qrcodes(models.Model):
     # def __str__(self):
     #     return self.type
 
+class OtherSocialLinks(models.Model):
+    social_link_title = models.CharField(max_length=250, null=True)
+    social_link = models.CharField(max_length=250, null=True)
+    social_icon = models.ImageField(upload_to='social_icons', null=True)
+    qrcode = models.ForeignKey(Qrcodes, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.social_link_title
 
 class Images(models.Model):
     image = models.ImageField(upload_to='images/', null=True)

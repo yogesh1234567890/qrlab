@@ -2565,7 +2565,9 @@ def dynamic_qr_code(request, id):
             else:
                 image = 'static/images/default_img.png'
             data={}
-            data['dp']=image
+            base_url = request.build_absolute_uri('/')[:-1]
+
+            data['dp'] = base_url + '/' + image
             data['name']=qr_Data.full_name
             data['title']=qr_Data.title
             data['email']=qr_Data.email
@@ -2588,8 +2590,14 @@ def dynamic_qr_code(request, id):
                 socialLinks.append({"title":qr_Data.social_snapchat_link_title,"icon":"snapchat","link":qr_Data.social_snapchat_link})
             if qr_Data.social_reddit_link_title:
                 socialLinks.append({"title":qr_Data.social_reddit_link_title,"icon":"reddit","link":qr_Data.social_reddit_link})
-            if qr_Data.social_other_link_title:
-                socialLinks.append({"title":qr_Data.social_other_link_title,"icon":"globe","link":qr_Data.social_other_link})
+            
+            other_social_links = OtherSocialLinks.objects.filter(qrcode=qr_Data)
+            for link in other_social_links:
+                if link.social_icon:
+                    socialLinks.append({"title":link.social_link_title,"icon":link.social_icon.url,"link":link.social_link})
+                else:
+                    socialLinks.append({"title":link.social_link_title,"icon":"globe","link":link.social_link})
+
             data['socialLinks']=socialLinks
 
             return render(request, 'display-social.html', {'data': data})
@@ -2685,8 +2693,14 @@ def social_media_create(request):
         social_snapchat_link= ''
         social_reddit_link_title= ''
         social_reddit_link= ''
-        social_other_link_title= ''
-        social_other_link= ''
+
+        other_social_links=[]
+
+        icons = ['facebook','twitter','instagram','linkedin','pinterest','youtube','snapchat','reddit']
+        for i in social_links:
+            if i['icon'] not in icons:
+                other_social_links.append(i)
+
         for i in social_links:
             if i['icon'] == 'facebook':
                 social_facebook_link_title = i['title']
@@ -2712,10 +2726,17 @@ def social_media_create(request):
             if i['icon'] == 'reddit':
                 social_reddit_link_title = i['title']
                 social_reddit_link = i['link']
-            else:
-                social_other_link_title = i['title']
-                social_other_link = i['link']
-            
+
+        other_social_data=[] 
+        if other_social_links:
+            for link in other_social_links:
+                other_links = OtherSocialLinks(
+                    social_link_title = link['title'],
+                    social_link = link['link'],
+                    social_icon =None if link['icon'] == 'globe' else to_internal_value(link['icon'])
+                )
+                other_social_data.append(other_links)
+
 
         data={
             'user_id': request.user,
@@ -2740,8 +2761,6 @@ def social_media_create(request):
             'social_snapchat_link': social_snapchat_link,
             'social_reddit_link_title': social_reddit_link_title,
             'social_reddit_link': social_reddit_link,
-            'social_other_link_title': social_other_link_title,
-            'social_other_link': social_other_link,
             'profile_picture': image,
             'type' : 'link',
             'bg_color': '#ffffff', 
@@ -2760,6 +2779,9 @@ def social_media_create(request):
             'label_font': 'AbrilFatface.svg', 
         }
         qrid = Qrcodes.objects.create(**data)
+        for i in other_social_data:
+            i.qrcode = qrid
+            i.save()
         return JsonResponse({'id': qrid.id}, status=200)
     return render(request, 'create-social.html')
 
