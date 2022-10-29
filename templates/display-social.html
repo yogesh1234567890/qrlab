@@ -1,244 +1,71 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+<html lang="">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="icon" href="/create-profile/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="/profile/favicon.ico" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Questrial&amp;family=Allerta&amp;family=Candal&amp;family=Fredoka:wght@400;500;600&amp;Solway:wght@300;400;500;700;800&amp;family=Dancing+Script:wght@400;500&amp;family=Sansita:wght@400;700&amp;display=swap"
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,301,300,400&amp;display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
-      integrity="sha512-Oy+sz5W86PK0ZIkawrG0iv7XwWhYecM3exvUtMKNJMekGFJtVAhibhRPTpmyTj8+lJCkmWfnpxKgT2OopquBHA=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css"
+      integrity="sha512-5PV92qsds/16vyYIJo3T/As4m2d8b6oWYfoqV+vtizRB6KhF1F9kYzWzQmsO6T3z3QG2Xdhrx7FQ+5R1LiQdUA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link href="{% static 'css/3.css' %}" rel="stylesheet" />
+    <title>profilecard</title>
+    <script defer="defer" src="{% static 'js/2.js' %}"></script>
+    <script defer="defer" src="{% static 'js/1.js' %}"></script>
+    <link href="{% static 'css/2.css' %}" rel="stylesheet" />
   </head>
-  <body>
-    <template id="single-post">
-      <div class="mockup-content-container" data-v-69f60277="">
-        <!----><!---->
-        <p class="user-name" data-v-69f60277=""></p>
-        <div class="user-infos profile__info-data" data-v-69f60277="">
-          <!----><!----><!----><!---->
-          <p data-v-69f60277="" class="profile__info-data"></p>
-        </div>
-        <div
-          class="user-socials"
-          data-v-69f60277=""
-          style="--list-color: #fff"
-        ></div>
+  <body
+    data-new-gr-c-s-check-loaded="14.1085.0"
+    style="background-color: rgb(255, 255, 255);"
+  >
+    <noscript
+      ><strong
+        >We're sorry but profilecard doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      ></noscript
+    >
+    <div class="container">
+      <img
+        src="{{data.dp}}"
+        alt=""
+        class="user-dp"
+        style="--dp-border: rgb(114, 73, 54);"
+      />
+      <p class="user-name">{{data.name}}</p>
+      <div class="user-infos">
+        <p><span>title:</span> <span>{{data.title}}</span></p>
+        <p><span>email:</span> <span>{{data.email}}</span></p>
+        <p><span>phone:</span> <span>{{data.phone}}</span></p>
+        <p>
+          <span>website:</span> <span><a href="{{data.website}}">{{data.website}}</a></span>
+        </p>
       </div>
-    </template>
-    <div class="preview">
-      <div class="phone-mockup-container">
-        <div class="phone-mockup-phone preview__page">
-          <div class="phone-mockup-content">
-            <div class="phone-screen-main">
-              <div class="phone-navbar">
-                <img
-                  src="https://qrlab.co/create-profile/img/logo.ee696d6e.png"
-                  alt=""
-                  class="logo"
-                />
-              </div>
-              <div class="phone-content"></div>
-            </div>
-          </div>
-          <img
-            src="https://qrlab.co/create-profile/img/mockup-phone.d859e481.png"
-            alt=""
-            class="phone-mockup-phone-img"
-          />
-        </div>
+      <div class="user-socials" style="--list-color: #fff;">
       </div>
     </div>
-
-    <script defer>
-      const postTemplate = document.querySelector("#single-post");
-      const fillContainer = document.querySelector(".phone-content");
-      // promisifying -> creating it to as a resolve/ reject form
-      function sendHttpRequest(method, url, data) {
-        const promise = new Promise((resolve, reject) => {
-          // 1. create an xmlhttp request
-          const xhr = new XMLHttpRequest();
-
-          // 2. set the request
-          xhr.open(method, url);
-
-          // response in json (parsing the response)
-          xhr.response = "json";
-
-          xhr.onload = function () {
-            resolve(xhr.response);
-          };
-
-          // 3. send the request
-          xhr.send(JSON.stringify(data));
-        });
-
-        return promise;
-      }
-
-      function fillData(datas) {
-        const { name, dp, email, formIdx, socialLinks, title, website, phone } =
-          datas;
-        const newObj = { dp, title, email, phone, website };
-
-        const postEl = document.importNode(postTemplate.content, true);
-        const profileInfo = postEl.querySelector(".profile__info-data");
-        const socialLinksElement = postEl.querySelector(".user-socials");
-
-        postEl.querySelector(".user-name").textContent = name;
-        let userInfoHtml,
-          socialLinkHtml = "";
-          if (dp) {
-          userInfoHtml += `<img src=${dp} alt="" class="user-dp" data-v-69f60277="" style="--dp-border:rgb(114, 73, 54);"/>`;
-        }
-        Object.keys(newObj).map((info) => {
-          if (info != "dp") {
-            userInfoHtml += `<p data-v-69f60277>
-           <span data-v-69f60277>
-                 ${info.toString().replace(/([a-z](?=[A-Z]))/g, "$1 ")}:
-               </span>
-               <span data-v-69f60277>${datas[info]}</span>
-         </p>
-             `;
-          }
-        });
-
-        function icon(socialLink, className) {
-          let link = "";
-          switch (className) {
-            case "facebook":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-facebook'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "twitter":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-twitter'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "instagram":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-instagram'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "linkedin":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-linkedin'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "pinterest":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-pinterest'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "youtube":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-youtube'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-            case "snapchat":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-snapchat'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-          case "reddit":
-              link = `<a
-            href=${socialLink?.link}
-            class="user-social"
-            target="_blank"
-            data-v-69f60277=""
-            style="--animate-delay: 0s"
-            ><i class='icon bi bi-reddit'></i><span class="text" data-v-69f60277>${socialLink?.title}</span></a
-          >`;
-              break;
-              default:
-              "";
-          }
-
-          return link;
-        }
-
-        if (socialLinks.length > 0) {
-          socialLinks.map((socialLink) => {
-            console.log(socialLink?.icon, { socialLinkHtml });
-
-            socialLinkHtml += `
-            ${icon(socialLink, socialLink?.icon)}
-                `;
-          });
-        }
-        //   postEl.querySelector("p").textContent = post.body;
-        profileInfo.insertAdjacentHTML(
-          "afterbegin",
-          userInfoHtml.replace("undefined", "")
-        );
-        socialLinksElement.insertAdjacentHTML(
-          "afterbegin",
-          socialLinkHtml.replace("undefined", "")
-        );
-        fillContainer.append(postEl);
-      }
-      const user_data = {{ data|safe }};
-
-      const datas = JSON.parse(localStorage.getItem("vstore_profile-info-v2"));
-      if (datas) {
-        fillData(user_data);
-      }
-      else {
-        const dataas = localStorage.setItem(
-          "vstore_profile-info-v2",
-          JSON.stringify(user_data)
-        );
-        const values = JSON.parse(localStorage.getItem("vstore_profile-info-v2"));
-        fillData(values);
-      };
-    </script>
   </body>
+  <script>
+    var data = {{data|safe}};
+    //get socialLinks from data
+    var socialLinks = data.socialLinks;
+    console.log(socialLinks);
+    //loop through socialLinks and add them to the user-socials div
+    for (var i = 0; i < socialLinks.length; i++) {
+      var socialLink = socialLinks[i];
+      var socialLinkName = socialLink.title;
+      var socialLinkUrl = socialLink.link;
+      var socialLinkIcon = socialLink.icon;
+      var socialLinkHtml = `<a href="${socialLinkUrl}" class="user-social" style="--animate-delay: 0.15s;"><i class="icon bi-${socialLinkIcon}"></i><span class="text">${socialLinkName}</span><span class="visit-btn"><i class="bi bi-box-arrow-right"></i></span></a>`;
+      document.querySelector(".user-socials").innerHTML += socialLinkHtml;
+    }
+
+  </script>
+
 </html>

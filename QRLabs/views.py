@@ -2559,7 +2559,11 @@ def dynamic_qr_code(request, id):
         if qr_Data.link_data:
             return HttpResponseRedirect(qr_Data.link_data)
         else:
-            image = qr_Data.profile_picture.url
+            image = qr_Data.profile_picture
+            if image:
+                image = image.url
+            else:
+                image = 'static/images/default_img.png'
             data={}
             data['dp']=image
             data['name']=qr_Data.full_name
