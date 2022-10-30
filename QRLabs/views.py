@@ -792,8 +792,28 @@ def mkstatic(request,objId):
     obj.qrCodeimage='mediaaa/pngs/'+str(uid)+'.png'
     obj.save()
     if obj.type=='link':
-        data = {
-            "link_data": obj.link_data,
+        if obj.link_data:
+            data = {
+                "link_data": obj.link_data,
+                "bg_color": obj.bg_color,
+                "frontcolor": obj.frontcolor,
+                "gradient_color": obj.gradient_color,
+                "marker_out_color": obj.marker_out_color,
+                "marker_in_color": obj.marker_in_color,
+                "custom_logo": obj.custom_logo,
+                "framecolor": obj.framecolor,
+                "pattern": obj.pattern,
+                "marker_out": obj.marker_out,
+                "marker_in": obj.marker_in,
+                "optionlogo": obj.optionlogo,
+                "outer_frame": obj.outer_frame,
+                "framelabel": obj.framelabel,
+                "label_font": obj.label_font,
+                "type": obj.type
+            }
+        else:
+            data = {
+            "link_data": request.build_absolute_uri('/') + 'qr/'+str(obj.id),
             "bg_color": obj.bg_color,
             "frontcolor": obj.frontcolor,
             "gradient_color": obj.gradient_color,
@@ -808,7 +828,7 @@ def mkstatic(request,objId):
             "outer_frame": obj.outer_frame,
             "framelabel": obj.framelabel,
             "label_font": obj.label_font,
-            "type": obj.type
+            "type": 'link'
         }
     
     if obj.type=='text':
