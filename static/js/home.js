@@ -130,7 +130,7 @@
                         n.append(e.name, e.value)
                     })), $("[name='transparent_code']").is(":checked") && n.append("transparent_code", !0), $("[name='gradient']").is(":checked") && n.append("gradient", !0), $("[name='markers_color']").is(":checked") && n.append("markers_color", !0), $("[name='custom_logo']")[0].files.length > 0 && n.append("custom_logo", $("[name='custom_logo']")[0].files[0]), $("[name='gradient']").is(":checked") && n.append("gradient_color", $("[name='gradient_color']").val()), $("[name='radial']").is(":checked") && n.append("radial", !0), $("[name='no_logo_bg']").is(":checked") && n.append("no_logo_bg", !0), n.append("pattern", $("[name='pattern']:checked").val()), n.append("marker_out", $("[name='marker_out']:checked").val()), n.append("marker_in", $("[name='marker_in']:checked").val()), n.append("optionlogo", $("[name='optionlogo']:checked").val()), n.append("outer_frame", $("[name='outer_frame']:checked").val()), n.append("framelabel", $("[name='framelabel']").val()), n.append("label_font", $("[name='label_font']").val()), n.append("type", $("[name='type']:checked").val()), n.append("_token", $("meta[name='csrf']").attr("content")), r.innerHTML = "", $(".placeholder__image").hide(), $(".loader").removeClass("hidden"), c(),
                     $.ajax({
-                url: "https://qrsample.qrlab.co/get/qrcode/preview",
+                url: "https://qrsample.qrlab.co/api/generate/qrcode",
                         type: "POST",
                         data: n,
                         processData: !1,
