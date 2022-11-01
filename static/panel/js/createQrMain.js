@@ -135,4 +135,4 @@
             // }))
             
             , r(); var o, c = new URL(window.location.href).searchParams; c.get("active") && (o = c.get("active"), $(".active_type").removeClass("active_type"), $(".active_form").removeClass("active_form"), $("[for='".concat(o, "'] .qr-info__tab-content")).addClass("active_type"), $(".qr-info__form-".concat(o)).addClass("active_form"))
-});
+})();
